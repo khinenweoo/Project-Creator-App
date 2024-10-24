@@ -7,8 +7,8 @@ export const LayoutProvider = ({ children }) => {
         ripple: false,
         inputStyle: 'outlined',
         menuMode: 'static',
-        colorScheme: 'dark',
-        theme: 'md-dark-indigo',
+        colorScheme: 'light',
+        theme: 'tailwind-light',
         scale: 14
     });
 

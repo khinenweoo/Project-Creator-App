@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
+use Carbon\Carbon;
 
 class ProjectController extends Controller
 {
@@ -30,6 +31,23 @@ class ProjectController extends Controller
         $projects = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->onEachSide(1);
+
+        
+        foreach ($projects as $key => $project) {
+            $created_date = Carbon::parse($project->created_at);
+            $due_date = $project->due_date != null ? Carbon::parse($project->due_date) : 0;
+
+            $month_duration = $created_date->diffInMonths($due_date);
+
+            $days_duration = '';
+            if ($month_duration < 1) {
+                $days_duration = $due_date->addDays() . ' Days';
+            }
+            $project->duration = $days_duration != '' ? $days_duration : $month_duration . ' Month';
+
+            // tasks count
+            $project->tasks_count = $project->tasks->count();
+        }
             
         return inertia("Project/Index", [
             "projects" => ProjectResource::collection($projects),
