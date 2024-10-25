@@ -46,12 +46,6 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::get('/uikit/button', function () {
-    return Inertia::render('main/uikit/button/page');
-})->name('button');
-
-
-
 
 
 require __DIR__.'/auth.php';
