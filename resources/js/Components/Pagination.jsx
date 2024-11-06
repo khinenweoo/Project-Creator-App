@@ -9,8 +9,8 @@ export default function Pagination({links}) {
                 href={link.url || ""}
                 key={link.label}
                 className={
-                    "inline-block py-2 px-3 border-round rounded-lg text-gray-500 text-md " +
-                    (link.active ? "bg-blue-100 text-gray-600 " : "") + 
+                    "inline-block py-2 px-3 border-round rounded-sm text-gray-500 text-md " +
+                    (link.active ? " text-gray-800 " : "") + 
                     (!link.url ? "!text-gray-300 cursor-not-allowed " : "hover:bg-gray-950")
                 }
                 dangerouslySetInnerHTML={{__html: link.label}}></Link>

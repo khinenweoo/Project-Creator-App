@@ -95,7 +95,7 @@ class ProjectController extends Controller
             ->onEachSide(1);
 
         return inertia("Project/Show", [
-            'project' => new ProjectResource($project),
+            "project" => new ProjectResource($project),
             "tasks" => TaskResource::collection($tasks),
             'queryParams' => request()->query() ?: null,
         ]);

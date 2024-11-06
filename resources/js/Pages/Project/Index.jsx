@@ -73,11 +73,8 @@ export default function Index({ auth, projects, queryParams = null }) {
                                                 <div className="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
                                                     <div className="lesson_name w-7 h-6">
                                                         <h6 className="fw-bold hover:underline text-nowrap">
-                                                            {/* <Link href={route('project.show', { project: project.id })} className="text-gray-800">
-                                                                {project.name}
-                                                            </Link> */}
 
-                                                            <Link href={route('project.show', { project: project.id})} className="text-gray-800" >
+                                                            <Link href={route('project.show', { project: project.id })} className="text-gray-800" >
                                                                 {project.name}
                                                             </Link>
                                                         </h6>
@@ -85,17 +82,18 @@ export default function Index({ auth, projects, queryParams = null }) {
                                                     <div className="btn-group flex justify-end w-4" role="group" aria-label="Basic outlined example">
                                                         
                                                         
-                                                        <Link href={route('project.edit', project.id)}>
+                                                        <Link href={route('project.edit', { project: project.id })}>
                                                             <button type="button" className="p-button p-component p-button-icon-only p-button-outlined p-button-success mr-2" data-bs-toggle="modal">
                                                             <i className="pi pi-file-edit" />
                                                             </button>
                                                         </Link>                                                    
                                                         
-                                                        <Link href={route('project.destroy', project.id)}>
+                                                        <Link href={route('project.destroy', { project: project.id })}>
                                                             <button type="button" className="p-button p-component p-button-icon-only p-button-outlined p-button-danger" data-bs-toggle="modal">
                                                                 <i className="pi pi-trash" />
                                                             </button>
                                                         </Link>
+                                                        
 
                                                     </div>
                                                 </div>
