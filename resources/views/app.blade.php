@@ -17,8 +17,7 @@
         @inertiaHead
 
         <link id="theme-css" href={{asset('/themes/tailwind-light/theme.css')}} rel="stylesheet"></link>
-        <!-- md-dark-indigo -->
-        <!-- <link id="theme-css" href={{asset('/themes/md-dark-indigo/theme.css')}} rel="stylesheet"></link> -->
+
     </head>
     <body class="font-sans antialiased">
         @inertia

@@ -10,4 +10,15 @@ export default defineConfig({
         }),
         react(),
     ],
+    build: {
+        sourcemap: false, // This can help avoid source-map related issues
+    },
+    css: {
+        devSourcemap: false
+    },
+    server: {
+        hmr: {
+            overlay: false // This will prevent some development-only errors from showing
+        }
+    }
 });

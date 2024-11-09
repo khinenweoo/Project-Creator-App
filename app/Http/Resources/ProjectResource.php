@@ -24,8 +24,9 @@ class ProjectResource extends JsonResource
             'due_date' => (new Carbon($this->due_date))->format('d M'),
             'duration' => $this->duration,
             'status' => $this->status,
-            'image_path' => $this->image_path ?
-                Storage::url($this->image_path) : '',
+            // 'image_path' => $this->image_path ?
+            //     Storage::url($this->image_path) : '',
+            'image_path' => $this->image_path ? $this->image_path : '',
             'tasks' => $this->tasks_count? $this->tasks_count : 0,
             'createdBy' => new UserResource($this->createdBy),
             'updatedBy' => new UserResource($this->updatedBy),

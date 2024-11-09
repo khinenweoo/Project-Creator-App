@@ -6,9 +6,9 @@ import { useState } from "react";
 import { router } from "@inertiajs/react";
 import { useEffect } from "react";
 import Pagination from "@/Components/Pagination";
-import { data } from "autoprefixer";
+import { TASK_STATUS_CLASS_MAP } from "@/constants";
 
-export default function TasksTable({tasks, queryParams = null}) {
+export default function TasksTable({ tasks, queryParams = null, hideProjectColumn = false }) {
     queryParams = queryParams || {};
 
     const [loading, setLoading] = useState(true);
@@ -22,16 +22,23 @@ export default function TasksTable({tasks, queryParams = null}) {
 
     }, []);
 
-    const searchFieldChanged = (name, value) => {
+    const searchFieldChange = (name, value) => {
+
         if (value) {
-            queryParams[name] = value
+            queryParams[name] = value;
+            console.log("query value",queryParams);
         } else {
-            delete queryParams[name]
+            delete queryParams[name];
         }
 
         router.get(route('task.index', queryParams));
     }
 
+    const onKeyPress = (name, e) => {
+        if (e.key !== 'Enter') return;
+
+        searchFieldChange(name, e.target.value);
+    }
 
     const clearFilter = () => {
         queryParams = null;
@@ -41,12 +48,13 @@ export default function TasksTable({tasks, queryParams = null}) {
         return (
             <div className="flex justify-content-between">
                 <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
-                <span>
+                <span className="p-input-icon-left">
                     <i className="pi pi-search" />
-                    <InputText 
-                    value={queryParams.name} 
-                    placeholder="Task Name Search" 
-                    onChange={e => searchFieldChanged('name', e.target.value)}
+                    <InputText
+                        value={queryParams.name}
+                        placeholder="Task Name Search"
+                        onBlur={e => searchFieldChange('name', e.target.value)}
+                        onKeyPress={e => onKeyPress('name', e)}
                     />
                 </span>
             </div>
@@ -60,35 +68,37 @@ export default function TasksTable({tasks, queryParams = null}) {
         );
 
     }
+    const statusBodyTemplate = (rowData) => {
+        return <span className={`customer-badge ${TASK_STATUS_CLASS_MAP[rowData.status]}`}>{rowData.status}</span>;
+    };
 
     return (
         <>
             <div>
+                <DataTable
+                    value={tasks.data}
+                    paginator
+                    className="p-datatable-gridlines"
+                    showGridlines
+                    rows={10}
+                    dataKey="id"
+                    filters={queryParams}
+                    filterDisplay="menu"
+                    loading={loading}
+                    responsiveLayout="scroll"
+                    emptyMessage="No Tasks found."
+                    header={header}
+                    footer={footerTemplate(tasks.meta.links)}
+                >
+                    <Column field="id" header="Id" style={{ flexGrow: 1, flexBasis: '100px' }} alignFrozen="left"></Column>
+                    <Column field="name" header="Task Name" style={{ minWidth: '12rem' }} ></Column>
+                    <Column field="assignedUser.name" header="Assigned" style={{ minWidth: '12rem' }} ></Column>
+                    <Column field="status" header="Status"  body={statusBodyTemplate} style={{ minWidth: '12rem' }}></Column>
+                    <Column field="created_at" header="Created Date" style={{ minWidth: '12rem' }} ></Column>
+                    <Column field="due_date" header="Due Date" style={{ minWidth: '12rem' }}></Column>
 
-                <h3>Tasks Table</h3>
-                <h5>Filter Menu</h5>
-                    <DataTable
-                        value={tasks.data}
-                        paginator
-                        className="p-datatable-gridlines"
-                        showGridlines
-                        rows={10}
-                        dataKey="id"
-                        filters={queryParams}
-                        filterDisplay="menu"
-                        loading={loading}
-                        responsiveLayout="scroll"
-                        emptyMessage="No Tasks found."
-                        header={header}
-                    >
-                        <Column field="id" header="Id" style={{ flexGrow: 1, flexBasis: '100px' }} alignFrozen="left"></Column>
-                        <Column field="name" header="Name" style={{ minWidth: '12rem' }} ></Column> 
-                        <Column field="status" header="Status" style={{ minWidth: '12rem' }}></Column>
-                        <Column field="created_at" header="Create Date" style={{ flexGrow: 1, flexBasis: '200px' }} ></Column>
-                        <Column field="due_date" header="Due Date" style={{ minWidth: '12rem' }}></Column>
-
-                        <Column field="createdBy.name" header="Created By" style={{ minWidth: '12rem' }}></Column>
-                    </DataTable>
+                    <Column field="createdBy.name" header="Created By" style={{ minWidth: '12rem' }}></Column>
+                </DataTable>
             </div>
         </>
     )
