@@ -23,7 +23,7 @@ export default function Show({ auth, project, tasks, queryParams }) {
                                         <div className="relative">
                                             <img src={project.data.image_path}
                                                 alt=""
-                                                className="w-full h-full md:h-28rem md:h-36"
+                                                className="w-full h-full md:h-28rem"
                                             />
                                         </div>
                                         <div className="p-6 text-gray-900 dark:text-gray-100">

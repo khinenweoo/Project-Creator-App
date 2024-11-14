@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
+use Carbon\Carbon;
 
 class TaskController extends Controller
 {
@@ -30,7 +31,22 @@ class TaskController extends Controller
         $tasks = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->onEachSide(1);
-            
+
+        foreach ($tasks as $key => $task) {
+            $created_date = Carbon::parse($task->created_at);
+            $due_date = $task->due_date != null ? Carbon::parse($task->due_date) : 0;
+
+            $month_duration = $created_date->diffInMonths($due_date);
+
+            $days_duration = '';
+            if ($month_duration < 1) {
+                // $days_duration = $due_date->addDays() . ' Days';
+                $days_duration = $due_date->diffInDays() . 'Days';
+            }
+            $task->duration = $days_duration != '' ? $days_duration : $month_duration . ' Month';
+        }
+
+
         return inertia("Task/Index", [
             "tasks" => TaskResource::collection($tasks),
             "queryParams" => request()->query() ?: null,

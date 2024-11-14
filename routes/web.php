@@ -33,7 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
      ->name('dashboard');
 
-     Route::resource('project', ProjectController::class)->only(['index', 'store', 'update']);
+     Route::resource('project', ProjectController::class)->only(['index', 'create', 'store', 'update']);
      Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('project.show');
      Route::get('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('project.edit');
      Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('project.destroy');

@@ -3,11 +3,14 @@ import Layout from "@/Layouts/layout/layout.jsx";
 import Pagination from "@/Components/Pagination";
 import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
-import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
+import { TASK_PRIORITY_CLASS_MAP, TASK_PRIORITY_TEXT_MAP, TASK_STATUS_BORDER_MAP, TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
+import Checkbox from "@/Components/Checkbox";
+import '../../../css/project.css';
+import { Button } from "primereact/button";
 
 export default function Index({ auth, tasks, queryParams = null }) {
     queryParams = queryParams || {};
-    
+
     const searchFieldChanged = (name, value) => {
         if (value) {
             queryParams[name] = value;
@@ -17,6 +20,11 @@ export default function Index({ auth, tasks, queryParams = null }) {
 
         router.get(route("task.index"), queryParams);
     };
+
+    const taskCheckBoxChange = (e) => {
+        let value = e.target.value;
+        console.log(value);
+    }
 
     const onKeyPress = (name, e) => {
         if (e.key !== "Enter") return;
@@ -35,7 +43,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
                             data-pc-name="dataview"
                             data-pc-section="root"
                         >
-                            <div className="p-dataview-header" data-pc-section="header">
+                            <div className="p-dataview-header bg-white border-none" data-pc-section="header">
                                 <div className="flex flex-column md:flex-row md:justify-content-between gap-2">
                                     <h4>Tasks</h4>
                                     <div className="flex justify-end gap-2">
@@ -71,104 +79,89 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                 </div>
                             </div>
                             {/* project data content */}
-                            <div className="p-dataview-content" data-pc-section="content">
+                            <div className="dataview-content">
                                 <div
-                                    className="p-grid grid p-nogutter grid-nogutter"
+                                    className="grid"
                                     data-pc-section="grid"
                                 >
                                     {tasks.data.map((task) => (
-                                        <div className="col-12 lg:col-4" key={task.id}>
-                                            <div className="card m-1 px-3">
-                                                <div className="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
-                                                    <div className="lesson_name w-7 h-6">
-                                                        <h6 className="fw-bold hover:underline text-nowrap">
-                                                            <Link
-                                                                href={route("task.show", { task: task.id })}
-                                                                className="text-gray-800"
-                                                            >
-                                                                {task.name}
-                                                            </Link>
-                                                        </h6>
+                                        <div className="col-12 md:col-6 lg:col-4" key={task.id}>
+                                            <div className="surface-0 shadow-3 ">
+                                            <div className={
+                                                "border-bottom-2 w-full h-full surface-overlay " +
+                                                TASK_STATUS_BORDER_MAP[task.status]  
+                                            }>
+                                                    <div className="flex justify-content-between p-3">
+                                                        <div className="mt-2 w-full pr-2">
+                                                            <h6 className="font-medium text-600 hover:underline text-wrap">
+                                                                <Link
+                                                                    href={route("task.show", { task: task.id })}
+                                                                    className="text-gray-900"
+                                                                >
+                                                                    {task.name}
+                                                                </Link>
+                                                            </h6>
+                                                        </div>
+                                                        <div className="flex align-items-center justify-content-center">
+                                                            <div className="status-checkbox w-2rem h-2rem mr-1">
+                                                                <label className="container">
+                                                                <Checkbox 
+                                                                type="checkbox" 
+                                                                checked={task.status === "completed"}
+                                                                onChange={(e) => {taskCheckBoxChange(e)}}
+                                                                />
+                                                                <span className="checkmark"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div
-                                                        className="btn-group flex justify-end w-4"
-                                                        role="group"
-                                                        aria-label="Basic outlined example"
-                                                    >
-                                                        <Link href={route("task.edit", { task: task.id })}>
-                                                            <button
-                                                                type="button"
-                                                                className="p-button p-component p-button-icon-only p-button-outlined p-button-success mr-2"
-                                                                data-bs-toggle="modal"
-                                                            >
-                                                                <i className="pi pi-file-edit" />
-                                                            </button>
-                                                        </Link>
+                                                    {/* */}
+                                                    <div className="grid p-3">
+                                                        <div className="col-4">
+                                                            <div className="flex align-items-center justify-between">
+                                                                <div className="flex align-items-center justify-content-center border-round w-3 h-2">
+                                                                    <i className="pi pi-flag-fill text-sm mr-2"></i>
+                                                                </div>
+                                                                <span className="text-sm">{task.due_date} </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-4">
+                                                            <div className="flex align-items-center justify-between">
+                                                                <div className="flex align-items-center justify-content-center border-round w-3 h-2">
+                                                                    <i className="pi pi-calendar-times text-sm mr-2"></i>
+                                                                </div>
+                                                                <span className="text-sm">{task.duration}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-4">
+                                                            <div className="flex align-items-center justify-between">
+                                                                <div className="flex align-items-center justify-content-center border-round w-3 h-2">
+                                                                    <i className="pi pi-user text-sm mr-2"></i>
+                                                                </div>
+                                                                <span className="text-sm">{task.assignedUser.name}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                                                        <Link
-                                                            href={route("task.destroy", { task: task.id })}
+                                                    {/* bottom */}
+                                                    <div className="flex align-items-center justify-content-end px-3 mb-3">
+                                                        <div
+                                                            className={
+                                                                "flex align-items-center justify-content-center border-round p-1 mr-2 " +
+                                                                TASK_PRIORITY_CLASS_MAP[task.priority]
+                                                            }
                                                         >
-                                                            <button
-                                                                type="button"
-                                                                className="p-button p-component p-button-icon-only p-button-outlined p-button-danger"
-                                                                data-bs-toggle="modal"
-                                                            >
-                                                                <i className="pi pi-trash" />
-                                                            </button>
+                                                            <span className="text-white text-sm">
+                                                                {TASK_PRIORITY_TEXT_MAP[task.priority]}
+                                                            </span>
+
+                                                        </div>
+                                                        <Link href={route('task.edit', {task: task.id})} >
+                                                            <Button type="button" className="p-button p-component p-button-icon-only p-button-outlined bg-blue-100 w-2rem h-2rem text-blue-500" icon="pi pi-pencil" />
                                                         </Link>
                                                     </div>
                                                 </div>
 
-                                                <div className="grid pt-4">
-                                                    <div className="col-6">
-                                                        <div className="flex align-items-center justify-between">
-                                                            <div className="flex align-items-center justify-content-center border-round w-4 h-2">
-                                                                <i className="pi pi-users text-xl"></i>
-                                                            </div>
-                                                            <span>2 Members</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-6">
-                                                        <div className="flex align-items-center justify-between">
-                                                            <div className="flex align-items-center justify-content-center border-round w-4 h-2">
-                                                                <i className="pi pi-calendar-times text-xl"></i>
-                                                            </div>
-                                                            <span>3 Month</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="grid mt-2">
-                                                    <div className="col-6">
-                                                        <div className="flex align-items-center justify-between">
-                                                            <div className="flex align-items-center justify-content-center border-round w-4 h-2">
-                                                                <i className="pi pi-list text-xl"></i>
-                                                            </div>
-                                                            <span>0 Tasks</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-6">
-                                                        <div className="flex align-items-center justify-between">
-                                                            <div className="flex align-items-center justify-content-center border-round w-4 h-2">
-                                                                <i className="pi pi-flag-fill text-xl"></i>
-                                                            </div>
-                                                            <span>{task.due_date}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr className="mb-3 mx-0 border-top-1 border-bottom-none border-300 mt-auto"></hr>
-                                                <div className="flex align-items-center justify-content-between mb-2">
-                                                    <h6 className="fw-bold mb-0">Progress</h6>
-                                                    <div
-                                                        className={
-                                                            "flex align-items-center justify-content-center border-round p-2 " +
-                                                            TASK_STATUS_CLASS_MAP[task.status]
-                                                        }
-                                                    >
-                                                        <span className="text-gray-900 text-sm">
-                                                            {TASK_STATUS_TEXT_MAP[task.status]}
-                                                        </span>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     ))}
