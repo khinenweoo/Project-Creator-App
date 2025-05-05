@@ -1,50 +1,64 @@
 import Layout from "@/Layouts/layout/layout";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Dropdown } from "primereact/dropdown";
-import { FileUpload } from "primereact/fileupload";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import InputError from "../../Components/InputError";
-import { useMemo, useState } from "react";
 import { Button } from "primereact/button";
+import { useEffect } from "react";
+import { useState } from "react";
 
-export default function Create({ }) {
+export default function Edit({ auth, project }) {
 
-    const { data, setData, post, errors, reset } = useForm({
-        name: '',
-        image: '',
-        status: '',
-        description: '',
-        due_date: ''
+    const projectData = project?.data || project || {};
+    const projectId = project?.data.id || project.id;
+
+    const statusOptions =  [
+        { name: 'pending', code: 'pending' },
+        { name: 'in_progress', code: 'in_progress' },
+        { name: 'completed', code: 'completed' },
+    ];
+
+    const initialStatusOption = statusOptions.find(s => s.code === projectData.status) || null;
+
+
+    const { data, setData, post, errors } = useForm({
+        image: null,
+        image_path: projectData.image_path || null,
+        name: projectData.name || "",
+        status: initialStatusOption,
+        description: projectData.description || "",
+        due_date: projectData.due_date1 || "",
+        _method: "PUT",
     });
 
-    const status =  [
-            { name: 'pending', code: 'pending' },
-            { name: 'in_progress', code: 'in_progress' },
-            { name: 'completed', code: 'completed' },
-        ];
-
-        const onUpload = (event) => {
-            console.log("file upload:");
-            console.log(event.files);
-            toast.current.show({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
-        };
+    const statusHandler = (value) => {
+        const updateStatusOption = statusOptions.find(s => s.code === value.code);
+        setData("status", updateStatusOption);
+    }
 
     const onSubmit = (e) => {
         e.preventDefault();
-    
-        console.log("Entry Data: ", data);
-
-        post(route("project.store"));
+        // Prepare the payload for submission
+        console.log("Form Data:", data); 
+        const submitData = {
+            ...data,
+            update_status: data.status ? data.status.code : "", // Extract the code for submission
+        };
+        console.log("Submit Data:", submitData); // Debugging line to check the payload
+        post(route("project.update", projectId), {
+            project: submitData,
+        });
     };
+
     return (
         <Layout>
-            <Head title="Project Create" />
-            <div className='block-viewer'>
+            <Head title="Project Edit" />
+            <div className='block-viewer max-w-6xl mx-auto'>
                 <div className='block-section'>
                     <div className='block-header'>
                         <div className="block-title">
-                            <h4>Create New Project</h4>
+                            <h4>Edit Project {data.name}</h4>
                         </div>
                     </div>
                     <div className='block-content p-6'>
@@ -53,7 +67,12 @@ export default function Create({ }) {
                                 <form onSubmit={onSubmit}>
                                     <div className="p-fluid formgrid grid">
                                         <div className="field col-12 md:col-12">
-                                            <label htmlFor="lastname2">Project Image</label>
+                                            {data.image_path && (
+                                                <div className="mb-4">
+                                                    <img src={data.image_path} alt="Project" className="w-full h-full md:h-20rem"/>
+                                                </div>
+                                            )}
+                                            <label htmlFor="project_image_path">Project Image</label>
                                             <InputText
                                                 id="project_image_path"
                                                 type="file"
@@ -70,21 +89,22 @@ export default function Create({ }) {
                                                 type="text" 
                                                 name="name" 
                                                 value={data.name}
-                                                onChange={(e) => setData('name', e.target.value)}
+                                                onChange={(e) => setData("name", e.target.value)}
                                             />
                                             <InputError message={errors.name} className="mt-2"/>
                                         </div>
                                         <div className="field col-12 md:col-3">
                                             <label htmlFor="status">Status</label>
                                             <Dropdown 
-                                            id="status" 
-                                            name="status"
-                                            value={data.status} 
-                                            onChange={(e) => setData('status', e.value.code)} 
-                                            options={status} 
-                                            optionLabel="name" 
-                                            placeholder="Select Status"
+                                                id="status" 
+                                                name="status"
+                                                value={data.status} 
+                                                onChange={(e) => statusHandler(e.value)}
+                                                options={statusOptions} 
+                                                optionLabel="name" 
+                                                placeholder="Select Status"
                                             />
+                                            <InputError message={errors.status} className="mt-2"/>
                                         </div>
                                         <div className="field col-12 md:col-3">
                                             <label htmlFor="due_date">Due Date</label>
@@ -101,11 +121,11 @@ export default function Create({ }) {
                                         <div className="field col-12">
                                             <label htmlFor="project_description">Project Description</label>
                                             <InputTextarea 
-                                            id="project_description" 
-                                            name="description" 
-                                            value={data.description}
-                                            onChange={(e) => setData('description', e.target.value)}
-                                            rows={4} 
+                                                id="project_description" 
+                                                name="description" 
+                                                value={data.description}
+                                                onChange={(e) => setData("description", e.target.value)}
+                                                rows={4} 
                                             />
                                              <InputError message={errors.description} className="mt-2"/>
                                         </div>
@@ -125,7 +145,6 @@ export default function Create({ }) {
                     </div>
                 </div>
             </div>
-
         </Layout>
     );
 }

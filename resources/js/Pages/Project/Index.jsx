@@ -6,7 +6,7 @@ import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
 import { Button } from "primereact/button";
 
-export default function Index({ auth, projects, queryParams = null }) {
+export default function Index({ auth, projects, queryParams = null, success }) {
     queryParams = queryParams || {};
 
     const searchFieldChanged = (name, value) => {
@@ -25,6 +25,14 @@ export default function Index({ auth, projects, queryParams = null }) {
         searchFieldChanged(name, e.target.value);
     }
 
+    const deleteProject = (project) => {
+        if (!window.confirm('Are you sure you want to delete the project?')) {
+            return;
+        }
+        router.delete(route('project.destroy', project.id));
+    }
+
+
     return (
         <Layout>
             <Head title="Projects" />
@@ -41,8 +49,11 @@ export default function Index({ auth, projects, queryParams = null }) {
                                     </Link>
                             </div>
                         </div>
+                        {success && (<div className="bg-teal-500 py-2 px-4 text-white border-teal-600 border-round mb-4">
+                        {success}
+                        </div>)}
                         <div className="p-dataview p-component p-dataview-grid" data-pc-name="dataview" data-pc-section="root">
-                            <div className="p-dataview-header bg-white border-none p-0" data-pc-section="header">
+                            <div className="p-dataview-header bg-white border-none p-0" data-pc-section="header">                            
                                 <div className="mt-5 mb-3 w-full">
                                     <div className="flex flex-row justify-content-start flex-wrap gap-2 mb-2">
                                         <div className="text-search">
@@ -94,11 +105,15 @@ export default function Index({ auth, projects, queryParams = null }) {
                                                             </button>
                                                         </Link>
 
-                                                        <Link href={route('project.destroy', { project: project.id })}>
-                                                            <button type="button" className="p-button p-component p-button-icon-only p-button-outlined p-button-danger">
-                                                                <i className="pi pi-trash" />
-                                                            </button>
-                                                        </Link>
+                                                        
+                                                        <button 
+                                                            type="button"
+                                                            onClick={e => deleteProject(project)}
+                                                            className="p-button p-component p-button-icon-only p-button-outlined p-button-danger"
+                                                        >
+                                                            <i className="pi pi-trash" />
+                                                        </button>
+                                                        
                                                     </div>
                                                 </div>
 

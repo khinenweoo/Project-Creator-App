@@ -8,6 +8,9 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TasksResource;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -32,19 +35,26 @@ class ProjectController extends Controller
         $projects = $query->orderBy($sortField, $sortDirection)
             ->paginate(10) ?? [];
 
-        
+
         foreach ($projects as $key => $project) {
             $created_date = Carbon::parse($project->created_at);
-            $due_date = $project->due_date != null ? Carbon::parse($project->due_date) : 0;
-
-            $month_duration = $created_date->diffInMonths($due_date);
-
-            $days_duration = '';
-            if ($month_duration < 1) {
-                $days_duration = $due_date->addDays() . ' Days';
+            $due_date = $project->due_date != null ? Carbon::parse($project->due_date) : null;
+        
+            if ($due_date) {
+                $month_duration = $created_date->diffInMonths($due_date);
+                $days_duration = '';
+        
+                if ($month_duration < 1) {
+                    // Calculate the difference in days
+                    $days_duration = $created_date->diffInDays($due_date) . ' Days';
+                }
+        
+                // Set the duration based on the calculated values
+                $project->duration = $days_duration != '' ? $days_duration : $month_duration . ' Month';
+            } else {
+                $project->duration = 'No due date';
             }
-            $project->duration = $days_duration != '' ? $days_duration : $month_duration . ' Month';
-
+        
             // tasks count
             $project->tasks_count = $project->tasks->count();
         }
@@ -69,7 +79,18 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        $data = $request->validated();
+        $image = $data['image'] ?? null;
+        $data['created_by'] = Auth::id();
+        $data['updated_by'] = Auth::id();
+
+        if($image) {
+           $data['image_path'] = $image->store('project/'.Str::random(), 'public');
+        }
+
+        Project::create($data);
+
+        return to_route('project.index')->with('success', 'Project was created successfully.');
     }
 
     /**
@@ -116,7 +137,22 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $data = $request->validated();
+
+        $image = $data['image'] ?? null;
+        $data['updated_by'] = Auth::id();
+        $data['status'] = $data['status']['code'];
+
+        if ($image) {
+            if ($project->image_path) {
+                Storage::disk('public')->deleteDirectory(dirname($project->image_path));
+            }
+            $data['image_path'] = $image->store('project/' . Str::random(), 'public');
+        }
+        $project->update($data);
+
+        return to_route('project.index')
+            ->with('success', "Project \"$project->name\" was updated");
     }
 
     /**
@@ -124,6 +160,11 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $name = $project->name;
+        $project->delete();
+        if ($project->image_path) {
+            Storage::disk('public')->deleteDirectory(dirname($project->image_path));
+        }
+        return to_route('project.index')->with('success', "Project \"$name\" was deleted");
     }
 }

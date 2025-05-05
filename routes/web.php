@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -36,10 +37,12 @@ Route::middleware(['auth', 'verified'])->group(function() {
      Route::resource('project', ProjectController::class)->only(['index', 'create', 'store', 'update']);
      Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('project.show');
      Route::get('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('project.edit');
+     Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('project.update');
      Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('project.destroy');
      
      Route::resource('task', TaskController::class);
      Route::resource('user', UserController::class);
+     Route::resource('member', MemberController::class);
 
 });
 

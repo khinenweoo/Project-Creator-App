@@ -142,7 +142,7 @@ const Layout = ({ children }) => {
         <React.Fragment>
             <div className={containerClass}>
                 <AppTopbar ref={topbarRef} />
-                <div ref={sidebarRef} className="layout-sidebar">
+                <div ref={sidebarRef} className="layout-sidebar bg-violet-300">
                     <AppSidebar />
                 </div>
                 <div className="layout-main-container">

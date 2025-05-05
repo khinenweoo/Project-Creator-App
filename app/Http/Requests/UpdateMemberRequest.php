@@ -3,16 +3,15 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateProjectRequest extends FormRequest
+class UpdateMemberRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -23,11 +22,7 @@ class UpdateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => ['nullable', 'image'],
-            'name' => ['required', 'max:255'],
-            'status' => ['required'],
-            "description" => ['nullable', 'string'],
-            'due_date' => ['nullable', 'date'],
+            //
         ];
     }
 }

@@ -20,7 +20,7 @@ export default function Show({ auth, project, tasks, queryParams }) {
                             <div className="col-12">
                                 <div className="max-w-7xl mx-auto">
                                     <div className='overflow-hidden'>
-                                        <div className="relative">
+                                        <div className="relative px-4 shadow-mdrounded-md">
                                             <img src={project.data.image_path}
                                                 alt=""
                                                 className="w-full h-full md:h-28rem"
