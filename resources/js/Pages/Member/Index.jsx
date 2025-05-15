@@ -2,7 +2,7 @@ import { Head, Link, router } from "@inertiajs/react";
 import Layout from "@/Layouts/layout/layout.jsx";
 import TextInput from "@/Components/TextInput";
 
-export default function Index() {
+export default function Index({ members, queryParams = null, success }) {
 
   const searchFieldChanged = (name, value) => {
     if (value) {
@@ -19,6 +19,14 @@ export default function Index() {
 
     searchFieldChanged(name, e.target.value);
   }
+
+  const deleteMember = (member) => {
+      if (!window.confirm('Are you sure you want to delete the project?')) {
+          return;
+      }
+      router.delete(route('project.destroy', member.id));
+  }
+
   return (
     <Layout>
       <Head title="Projects" />
@@ -54,17 +62,12 @@ export default function Index() {
                     </div>
                     <div className="dropdown-wrapper">
 
-                      <SelectInput
-                        className="border-round border-gray-300 block w-full h-full p-2"
-                        defaultValue={queryParams.status}
-                        onChange={e => searchFieldChanged('status', e.target.value)}
-                      >
-                        <option value="">Select Status</option>
-                        <option value="pending">Pending</option>
-                        <option value="in_progress">In Progress</option>
-                        <option value="completed">Completed</option>
-
-                      </SelectInput>
+                      <TextInput
+                          className="p-inputtext p-component"
+                          placeholder="Search by Email"
+                          onBlur={e => searchFieldChanged('email', e.target.value)}
+                          onKeyPress={(e) => onKeyPress("email", e)}
+                        />
                     </div>
                   </div>
                 </div>
@@ -94,7 +97,7 @@ export default function Index() {
 
                             <button
                               type="button"
-                              onClick={e => deleteProject(member)}
+                              onClick={e => deleteMember(member)}
                               className="p-button p-component p-button-icon-only p-button-outlined p-button-danger"
                             >
                               <i className="pi pi-trash" />
@@ -107,17 +110,17 @@ export default function Index() {
                           <div className="col-6">
                             <div className="flex align-items-center justify-between">
                               <div className="flex align-items-center justify-content-center border-round w-4 h-2">
-                                <i className="pi pi-users text-xl"></i>
+                                <i className="pi pi-email text-xl"></i>
                               </div>
-                              <span>2 Members</span>
+                              <span>member@email.com</span>
                             </div>
                           </div>
                           <div className="col-6">
                             <div className="flex align-items-center justify-between">
                               <div className="flex align-items-center justify-content-center border-round w-4 h-2">
-                                <i className="pi pi-calendar-times text-xl"></i>
+                                <i className="pi pi-phone text-xl"></i>
                               </div>
-                              <span>{member.duration}</span>
+                              <span>202-555-0174</span>
                             </div>
                           </div>
                         </div>
@@ -127,7 +130,7 @@ export default function Index() {
                               <div className="flex align-items-center justify-content-center border-round w-4 h-2">
                                 <i className="pi pi-list text-xl"></i>
                               </div>
-                              <span>{member.tasks} Tasks</span>
+                              <span>2734 West Fork Street,EASTON 02334.</span>
                             </div>
                           </div>
                           <div className="col-6">
@@ -135,18 +138,14 @@ export default function Index() {
                               <div className="flex align-items-center justify-content-center border-round w-4 h-2">
                                 <i className="pi pi-flag-fill text-xl"></i>
                               </div>
-                              <span>{member.due_date}</span>
+                              <span>19/03/1980</span>
                             </div>
                           </div>
                         </div>
                         <hr className="mb-3 mx-0 border-top-1 border-bottom-none border-300 mt-auto"></hr>
                         <div className="flex align-items-center justify-content-between mb-2">
                           <h6 className="fw-bold mb-0">Progress</h6>
-                          <div className={"flex align-items-center justify-content-center border-round p-2 " +
-                            PROJECT_STATUS_CLASS_MAP[member.status]
-                          }>
-                            <span className="text-gray-900 text-sm">{PROJECT_STATUS_TEXT_MAP[member.status]}</span>
-                          </div>
+                          
                         </div>
                       </div>
                     </div>

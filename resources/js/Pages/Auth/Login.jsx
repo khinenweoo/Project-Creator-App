@@ -36,16 +36,13 @@ export default function Login({status, canResetPassword}) {
         <GuestLayout>
             <Head title="Log in"/>
 
-            {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+            {status && <div className="mb-4 text-sm ">{status}</div>}
 
 
             <div className="flex align-items-center justify-content-center flex-column">
-                <img src="/images/logo/-dark.svg" alt="hyper" height={50} className="mb-3"/>
                 <div className="surface-card p-6 sm:p-4 shadow-2 border-round w-full lg:w-4">
                     <div className="text-center mb-5">
-                        <div className="text-900 text-3xl font-medium mb-3">Welcome Back</div>
-                        <span className="text-600 font-medium line-height-3">Don't have an account?</span>
-                        <Link  href={route('register')} className="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</Link>
+                        <div className="text-900 text-2xl font-medium mb-3">Welcome Back</div>
                     </div>
                     <form onSubmit={submit}>
                         <div>
@@ -79,13 +76,13 @@ export default function Login({status, canResetPassword}) {
                                     <Checkbox inputId="rememberme-login"
                                               onChange={(e) => setData('remember', e.target.checked)}
                                               checked={data.remember} className="mr-2"/>
-                                    <label htmlFor="rememberme-login">Remember me</label>
+                                    <label htmlFor="rememberme-login" className='text-md'>Remember me</label>
                                 </div>
 
                                 {canResetPassword && (
                                     <Link
                                         href={route('password.request')}
-                                        className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer"
+                                        className="font-medium no-underline ml-2 text-md text-blue-500 text-right cursor-pointer"
                                     >
                                         Forgot your password?
                                     </Link>
@@ -95,6 +92,10 @@ export default function Login({status, canResetPassword}) {
                             <PrimaryButton label="Sign In" className="w-full" disabled={processing}/>
                         </div>
                     </form>
+                    <div className="text-center my-3">
+                        <span className="text-600 font-medium line-height-3">Not a member yet?</span>
+                        <Link  href={route('register')} className="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Sign up!</Link>
+                    </div>
                 </div>
             </div>
         </GuestLayout>

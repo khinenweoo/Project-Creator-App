@@ -18,31 +18,30 @@ export default function Show({ auth, project, tasks, queryParams }) {
                     <div className='block-content'>
                         <div className="grid">
                             <div className="col-12">
-                                <div className="max-w-7xl mx-auto">
-                                    <div className='overflow-hidden'>
-                                        <div className="relative px-4 shadow-mdrounded-md">
+                                <div className=" mx-auto">
+                                    <div className='overflow-hidden mx-4 my-4 flex flex-column md:flex-row justify-content-around align-items-center'>
+                                        <div className="flex-1 relative shadow-mdrounded-md md:mr-3">
                                             <img src={project.data.image_path}
                                                 alt=""
-                                                className="w-full h-full md:h-28rem"
+                                                className="w-auto h-full md:h-18rem"
                                             />
                                         </div>
-                                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                                        <div className="flex-1 text-gray-900 dark:text-gray-100">
                                             <div className='title'>
                                                 <p className="font-bold text-lg">{project.data.name}</p>
-                                               
                                             </div>
-                                            <div className="body">
+                                            <div className="body px-2">
                                                 <div className="grid mt-2">
                                                     {/* col 1 */}
                                                     <div className='col'>
-                                                        <div className="grid gap-4 grid-cols-2 mt-4 justify-items-center">
-                                                            <Button icon="pi pi-bookmark" outlined severity="warning" />
+                                                        <div className="grid gap-2 grid-cols-2 mt-4 justify-items-center">
+                                                            <Button icon="pi pi-bookmark" size='small' outlined severity="warning" />
 
                                                             <div className="mt-1">
-                                                                <label className="text-lg mb-2">Status</label>
+                                                                <label className="text-md mb-4">Status</label>
                                                                 <div
                                                                     className={
-                                                                        "px-2 py-1 font-bold text-white border-round " +
+                                                                        "px-1 py-1 font-bold text-white border-round " +
                                                                         PROJECT_STATUS_CLASS_MAP[project.data.status]
                                                                     }
                                                                 >
@@ -55,21 +54,21 @@ export default function Show({ auth, project, tasks, queryParams }) {
 
                                                     {/* col2 */}
                                                     <div className='col'>
-                                                        <div className="grid gap-4 grid-cols-2 mt-4 justify-items-center">
+                                                        <div className="grid gap-2 grid-cols-2 mt-4 justify-items-center">
                                                             <Button icon="pi pi-user" outlined severity="info" />
                                                             <div>
-                                                                <label className="text-lg mb-2">Created By</label>
-                                                                <p className="font-bold mt-1">{project.data.createdBy.name}</p>
+                                                                <label className="text-md mb-3">Created By</label>
+                                                                <p className="font-bold mt-2">{project.data.createdBy.name}</p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     {/* col 3 */}
                                                     <div className='col'>
                                                         <div>
-                                                            <div className="grid gap-4 grid-cols-2 mt-4 justify-items-center">
+                                                            <div className="grid gap-2 grid-cols-2 mt-4 justify-items-center">
                                                                 <Button icon="pi pi-bell" outlined severity="danger" />
                                                                 <div>
-                                                                    <label className="text-lg mb-2">Due Date</label>
+                                                                    <label className="text-md mb-3">Due Date</label>
                                                                     <p className="font-bold mt-1">{project.data.due_date}</p>
                                                                 </div>
                                                             </div>

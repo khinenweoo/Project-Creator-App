@@ -29342,3 +29342,13 @@ pre.app-code code {
 .p-paginator-bottom.p-paginator {
   display: none!important;
 }
+
+
+.profile .img-thumbnail .avatar{
+  width: 120px;
+  min-width: 120px;
+  height: 120px;
+  border-radius: 50% !important;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}

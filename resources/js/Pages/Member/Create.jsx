@@ -1,9 +1,11 @@
 import Layout from "@/Layouts/layout/layout";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Dropdown } from "primereact/dropdown";
+import { FileUpload } from "primereact/fileupload";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import InputError from "../../Components/InputError";
+import { useMemo, useState } from "react";
 import { Button } from "primereact/button";
 
 export default function Create({ }) {
@@ -22,24 +24,27 @@ export default function Create({ }) {
             { name: 'completed', code: 'completed' },
         ];
 
-    const statusHandler = (value) => {
-        setData("status", value);
-    }
-
+        const onUpload = (event) => {
+            console.log("file upload:");
+            console.log(event.files);
+            toast.current.show({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
+        };
 
     const onSubmit = (e) => {
         e.preventDefault();
+    
+        console.log("Entry Data: ", data);
 
-        post(route("project.store"));
+        post(route("member.store"));
     };
     return (
         <Layout>
-            <Head title="Project Create" />
+            <Head title="Member Create" />
             <div className='block-viewer'>
                 <div className='block-section'>
                     <div className='block-header'>
                         <div className="block-title">
-                            <h4>Create New Project</h4>
+                            <h4>Create New Member</h4>
                         </div>
                     </div>
                     <div className='block-content p-6'>
@@ -47,11 +52,10 @@ export default function Create({ }) {
                             <div className="col-12">
                                 <form onSubmit={onSubmit}>
                                     <div className="p-fluid formgrid grid">
-                                
                                         <div className="field col-12 md:col-12">
-                                            <label htmlFor="lastname2">Project Image</label>
+                                            <label htmlFor="lastname2">Member Image</label>
                                             <InputText
-                                                id="project_image_path"
+                                                id="memberimage_path"
                                                 type="file"
                                                 name="image"
                                                 className="mt-1 block w-full"
@@ -59,10 +63,10 @@ export default function Create({ }) {
                                             />
                                             <InputError message={errors.image} className="mt-2"/>
                                         </div>
-                                               <div className="field col-6 md:col-6">
-                                            <label htmlFor="project_name">Project Name</label>
+                                        <div className="field col-12 md:col-6">
+                                            <label htmlFor="membername">Member Name</label>
                                             <InputText 
-                                                id="project_name" 
+                                                id="membername" 
                                                 type="text" 
                                                 name="name" 
                                                 value={data.name}
@@ -70,19 +74,17 @@ export default function Create({ }) {
                                             />
                                             <InputError message={errors.name} className="mt-2"/>
                                         </div>
-                              
                                         <div className="field col-12 md:col-3">
                                             <label htmlFor="status">Status</label>
                                             <Dropdown 
                                             id="status" 
                                             name="status"
                                             value={data.status} 
-                                            onChange={(e) => statusHandler(e.value)} 
+                                            onChange={(e) => setData('status', e.value.code)} 
                                             options={status} 
                                             optionLabel="name" 
                                             placeholder="Select Status"
                                             />
-                                            <InputError message={errors.status} className="mt-2"/>
                                         </div>
                                         <div className="field col-12 md:col-3">
                                             <label htmlFor="due_date">Due Date</label>
@@ -97,9 +99,9 @@ export default function Create({ }) {
 
                                         </div>
                                         <div className="field col-12">
-                                            <label htmlFor="project_description">Project Description</label>
+                                            <label htmlFor="memberdescription">Member Description</label>
                                             <InputTextarea 
-                                            id="project_description" 
+                                            id="memberdescription" 
                                             name="description" 
                                             value={data.description}
                                             onChange={(e) => setData('description', e.target.value)}

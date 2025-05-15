@@ -3,6 +3,8 @@ import {LayoutContext, LayoutProvider} from "@/Layouts/layout/context/layoutcont
 import {PrimeReactProvider} from "primereact/api";
 import {Button} from "primereact/button";
 import React, {useContext} from "react";
+import "primereact/resources/themes/tailwind-light/theme.css";
+import "primereact/resources/primereact.min.css";
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
     const { layoutConfig} = useContext(LayoutContext);
@@ -11,53 +13,65 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
             <PrimeReactProvider>
                 <LayoutProvider>
             <Head title="Welcome" />
-            <div className="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-                <div className="sm:fixed sm:top-0 sm:left-0 p-6">
-
-                    <div className="flex align-items-center">
-                        <img src={`/images/logo/-${layoutConfig.colorScheme !== 'light' ? 'white' : 'dark'}.svg`} width="100.22px" height={'35px'} alt="logo" className="mr-3"/>
-
-                        {auth.user ? (
-                            <Link
-                                href={route('dashboard')}
-                                className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                            >
-                                Dashboard
-                            </Link>
-                        ) : (
-                            <>
+            <div className="relative min-h-screen  dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
+                {/* Navbar */}
+                <nav className="bg-white shadow-3 relative z-10">
+                    <div className="container mx-auto px-6 py-4 flex justify-content-between align-items-center">
+                        <a href="/" className="router-link-active router-link-exact-active flex items-center space-x-0 hover:opacity-90 transition-opacity" aria-current="page">
+                            <div className="h-10 w-16 relative overflow-visible">
+                                 {/* <img src={`/images/logo/-${layoutConfig.colorScheme !== 'light' ? 'white' : 'dark'}.svg`} width="100.22px" height={'35px'} alt="logo" className="absolute -top-2 -left-1 h-16 w-16"/> */}
+                            </div>
+                            <span className="text-2xl font-bold text-primary -ml-1">ProJix</span>
+                        </a>
+                        <div className="hidden md:flex md:mx-3">
+                            <a href="/" className="router-link-active router-link-exact-active text-gray-900 hover:text-primary transition-colors duration-200" aria-current="page"> Home </a>
+                            {auth.user ? (
                                 <Link
-                                    href={route('login')}
-                                    className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                                    href={route('dashboard')}
+                                    className="text-gray-900 ml-3 hover:text-primary transition-colors duration-200"
                                 >
-                                    Log in
+                                    Dashboard
                                 </Link>
+                            ) : (
+                                <>
+                                    <Link
+                                        href={route('login')}
+                                        className="text-gray-900 ml-3 hover:text-primary transition-colors duration-200"
+                                    >
+                                        Log in
+                                    </Link>
 
-                                <Link
-                                    href={route('register')}
-                                    className="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                >
-                                    Register
-                                </Link>
-                            </>
-                        )}
+                                    <Link
+                                        href={route('register')}
+                                        className="text-gray-900 ml-3 hover:text-primary transition-colors duration-200"
+                                    >
+                                        Register
+                                    </Link>
+                                </>
+                            )}
+                        </div>
+
+                        <button type="button" className="md:hidden flex align-items-center justify-content-between border-round text-gray-700 p-link layout-menu-button layout-topbar-button">
+                            <i className="pi pi-bars text-2xl" />
+                        </button>
                     </div>
-                </div>
-
+                </nav>
 
                 <div className="grid grid-nogutter surface-0 text-800">
-                    <div className="col-12 md:col-6 p-6 text-center md:text-left flex align-items-center ">
+                    <div className="col-12 p-6 text-center flex justify-content-center align-items-center ">
                         <section>
-                            <span className="block text-6xl font-bold mb-1">Create the dashboard</span>
-                            <div className="text-6xl text-primary font-bold mb-3">your clients deserve to see</div>
-                            <p className="mt-0 mb-4 text-700 line-height-3">Craft a visually stunning and user-centric dashboard that showcases the information your clients deserve with bold, impactful design elements.</p>
+                            <div className='flex justify-content-center mb-6'>
+                                <img src={`/images/hero/project-draw.svg`} alt="welcome-image" className="h-3 w-3"/>
+                            </div>
+                            <span className="block text-5xl font-bold mb-1">Welcome to ProJix</span>
+                            <div className="text-3xl text-primary font-bold mb-3">Bring Your Projects to Life, Together</div>
+                            <p className="mt-0 mb-4 text-xl mx-8 text-gray-600 text-700 line-height-3">
+                                Track progress, assign tasks, and meet every deadline with ease.<br/>
+                                 Manage projects, tasks, and members effortlessly with ProJix.
 
-                            <Button label="Learn More" type="button" className="mr-3 p-button-raised" />
-                            <Button label="Live Demo" type="button" className="p-button-outlined" />
+</p>
+                            <Button label="Start Manage Your Task" type="button" className="mr-3 p-button-raised" />
                         </section>
-                    </div>
-                    <div className="col-12 md:col-6 overflow-hidden">
-                        <img src="/images/hero/hero-1.png" alt="hero-1" className="md:ml-auto block md:h-full" style={{ clipPath: 'polygon(8% 0, 100% 0%, 100% 100%, 0 100%)' }} />
                     </div>
                 </div>
 

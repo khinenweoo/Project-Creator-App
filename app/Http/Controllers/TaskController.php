@@ -6,7 +6,14 @@ use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
+use App\Http\Resources\ProjectResource;
+use App\Http\Resources\UserResource;
 use Carbon\Carbon;
+use App\Models\Project;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TaskController extends Controller
 {
@@ -28,8 +35,12 @@ class TaskController extends Controller
             $query->where("status", request("status"));
         }
 
+        if (request("priority")) {
+            $query->where("priority", "like", "%" . request("priority") . "%");
+        }
+
         $tasks = $query->orderBy($sortField, $sortDirection)
-            ->paginate(10)
+            ->paginate(12)
             ->onEachSide(1);
 
         foreach ($tasks as $key => $task) {
@@ -50,6 +61,7 @@ class TaskController extends Controller
         return inertia("Task/Index", [
             "tasks" => TaskResource::collection($tasks),
             "queryParams" => request()->query() ?: null,
+            "success" => session('success'),
         ]);
     }
 
@@ -58,7 +70,13 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        $projects = Project::query()->orderBy('name', 'asc')->get();
+        $users = User::query()->orderBy('name', 'asc')->get();
+
+        return inertia("Task/Create", [
+            'projects' => ProjectResource::collection($projects),
+            'users' => UserResource::collection($users),
+        ]);
     }
 
     /**
@@ -66,7 +84,18 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+        $data = $request->validated();
+        $image = $data['image'] ?? null;
+        $data['created_by'] = Auth::id();
+        $data['updated_by'] = Auth::id();
+        if ($image) {
+            $data['image_path'] = $image->store('task/' . Str::random(), 'public');
+            
+        }
+        Task::create($data);
+
+        return to_route('task.index')
+            ->with('success', 'A new Task was created successfully.');
     }
 
     /**

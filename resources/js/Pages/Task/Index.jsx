@@ -3,12 +3,12 @@ import Layout from "@/Layouts/layout/layout.jsx";
 import Pagination from "@/Components/Pagination";
 import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
-import { TASK_PRIORITY_CLASS_MAP, TASK_PRIORITY_TEXT_MAP, TASK_STATUS_BORDER_MAP, TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
+import { TASK_PRIORITY_CLASS_MAP, TASK_PRIORITY_TEXT_MAP, TASK_STATUS_BORDER_MAP } from "@/constants";
 import Checkbox from "@/Components/Checkbox";
 import '../../../css/project.css';
 import { Button } from "primereact/button";
 
-export default function Index({ auth, tasks, queryParams = null }) {
+export default function Index({ auth, tasks, queryParams = null, success }) {
     queryParams = queryParams || {};
 
     const searchFieldChanged = (name, value) => {
@@ -32,21 +32,41 @@ export default function Index({ auth, tasks, queryParams = null }) {
         searchFieldChanged(name, e.target.value);
     };
 
+    const deleteTask = (task) => {
+        if (!window.confirm('Are you sure you want to delete the task?')) {
+            return;
+        }
+        router.delete(route('task.destroy', task.id));
+    }
+
     return (
         <Layout>
             <Head title="Projects" />
             <div className="grid">
                 <div className="col-12">
                     <div className="card">
+                        <div className="flex flex-row justify-content-between border-bottom-1 surface-border pb-4">
+                            <div>
+                                <div className="font-medium text-3xl text-900">Tasks</div>
+                            </div>
+                            <div className="flex md:justify-content-end align-items-center lg:mt-0">
+                                    <Link href={route('task.create')} >
+                                            <Button label="Create Task" type="button" className="p-button-outlined mr-2" icon="pi pi-plus-circle" />
+                                    </Link>
+                            </div>
+                        </div>
+                       {success && (<div className="bg-teal-500 py-2 px-4 text-white border-teal-600 border-round mb-4">
+                            <span>{success}</span>
+                        </div>)}
                         <div
                             className="p-dataview p-component p-dataview-grid"
                             data-pc-name="dataview"
                             data-pc-section="root"
                         >
-                            <div className="p-dataview-header bg-white border-none" data-pc-section="header">
-                                <div className="flex flex-column md:flex-row md:justify-content-between gap-2">
-                                    <h4>Tasks</h4>
-                                    <div className="flex justify-end gap-2">
+                            <div className="p-dataview-header bg-white border-none p-0 mb-6" data-pc-section="header">
+                                <div className="mt-5 mb-3 w-full">
+                                    <div className="flex flex-row justify-content-start flex-wrap gap-2 mb-2">
+                              
                                         <div className="text-search">
                                             <span className="p-input-icon-left">
                                                 <i className="pi pi-search"></i>
@@ -61,7 +81,23 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                                 />
                                             </span>
                                         </div>
-                                        <div className="dropdown-wrapper max-w-sm mx-auto">
+                                  
+                                        <div className="dropdown-wrapper">
+                                            <SelectInput
+                                                className="border-round border-gray-300 block w-full h-full p-2"
+                                                defaultValue={queryParams.priority}
+                                                onChange={(e) =>
+                                                    searchFieldChanged("priority", e.target.value)
+                                                }
+                                            >
+                                                <option value="">Select Priority</option>
+                                                <option value="highest">Highest</option>
+                                                <option value="medium">Medium</option>
+                                                <option value="low">Low</option>
+                                                 <option value="lowest">Lowest</option>
+                                            </SelectInput>
+                                        </div>
+                                        <div className="dropdown-wrapper">
                                             <SelectInput
                                                 className="border-round border-gray-300 block w-full h-full p-2"
                                                 defaultValue={queryParams.status}
@@ -75,6 +111,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                                 <option value="completed">Completed</option>
                                             </SelectInput>
                                         </div>
+                  
                                     </div>
                                 </div>
                             </div>
@@ -93,7 +130,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                             }>
                                                     <div className="flex justify-content-between p-3">
                                                         <div className="mt-2 w-full pr-2">
-                                                            <h6 className="font-medium text-600 hover:underline text-wrap">
+                                                            <h6 className="font-medium text-600 hover:underline text-wrap mb-0">
                                                                 <Link
                                                                     href={route("task.show", { task: task.id })}
                                                                     className="text-gray-900"
@@ -115,9 +152,8 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    {/* */}
-                                                    <div className="grid p-3">
-                                                        <div className="col-4">
+                                                    <div className="grid px-3 py-2">
+                                                        <div className="col-6">
                                                             <div className="flex align-items-center justify-between">
                                                                 <div className="flex align-items-center justify-content-center border-round w-3 h-2">
                                                                     <i className="pi pi-flag-fill text-sm mr-2"></i>
@@ -125,7 +161,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                                                 <span className="text-sm">{task.due_date} </span>
                                                             </div>
                                                         </div>
-                                                        <div className="col-4">
+                                                        <div className="col-6">
                                                             <div className="flex align-items-center justify-between">
                                                                 <div className="flex align-items-center justify-content-center border-round w-3 h-2">
                                                                     <i className="pi pi-calendar-times text-sm mr-2"></i>
@@ -133,7 +169,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                                                 <span className="text-sm">{task.duration}</span>
                                                             </div>
                                                         </div>
-                                                        <div className="col-4">
+                                                        <div className="col-6">
                                                             <div className="flex align-items-center justify-between">
                                                                 <div className="flex align-items-center justify-content-center border-round w-3 h-2">
                                                                     <i className="pi pi-user text-sm mr-2"></i>
@@ -141,13 +177,26 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                                                 <span className="text-sm">{task.assignedUser.name}</span>
                                                             </div>
                                                         </div>
+                                                        <div className="col-12">
+                                                            <div className="flex align-items-center px-2">
+                                                                <span className="text-md text-indigo-500 border-round-xl bg-purple-50">
+                                                                    <i className="pi pi-briefcase text-sm mr-2"></i>
+                                                                    <Link
+                                                                    href={route("project.show", { project: task.project.id })}
+                                                                    className="text-bluegray-500"
+                                                                    >{task.project.name}
+                                                                    </Link>
+                                                                </span>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                     {/* bottom */}
-                                                    <div className="flex align-items-center justify-content-end px-3 mb-3">
+
+                                                    <div className="flex align-items-center justify-content-between px-3 mb-3">
                                                         <div
                                                             className={
-                                                                "flex align-items-center justify-content-center border-round p-1 mr-2 " +
+                                                                "flex align-items-center justify-content-center border-round p-2 mr-2 " +
                                                                 TASK_PRIORITY_CLASS_MAP[task.priority]
                                                             }
                                                         >
@@ -156,9 +205,21 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                                             </span>
 
                                                         </div>
-                                                        <Link href={route('task.edit', {task: task.id})} >
-                                                            <Button type="button" className="p-button p-component p-button-icon-only p-button-outlined bg-blue-100 w-2rem h-2rem text-blue-500" icon="pi pi-pencil" />
-                                                        </Link>
+
+                                                        <div className="action-group">
+                                                            <Link href={route('task.edit', {task: task.id})} >
+                                                                <button type="button" className="p-button p-component p-button-icon-only p-button-outlined p-button-success mr-2">
+                                                                    <i className="pi pi-file-edit" />
+                                                                </button>
+                                                            </Link>
+                                                            <button 
+                                                                type="button"
+                                                                onClick={e => deleteTask(task)}
+                                                                className="p-button p-component p-button-icon-only p-button-outlined p-button-danger"
+                                                            >
+                                                                <i className="pi pi-trash" />
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
 

@@ -8,7 +8,7 @@ export default defineConfig({
             input: 'resources/js/app.jsx',
             refresh: true,
         }),
-        react(),
+        react(),      
     ],
     build: {
         sourcemap: false, // This can help avoid source-map related issues

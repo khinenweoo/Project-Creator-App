@@ -15,11 +15,11 @@ export default function TasksTable({ tasks, queryParams = null, hideProjectColum
 
     useEffect(() => {
         setLoading(true);
-        if (tasks.data.length === 0) {
+        if (tasks.data.length > 0) {
             setLoading(false);
         }
 
-    }, []);
+    }, [loading]);
 
     const searchFieldChange = (name, value) => {
 
