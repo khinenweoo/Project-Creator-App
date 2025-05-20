@@ -11,14 +11,17 @@ import AppTopbar from "@/Layouts/layout/AppTopbar.jsx";
 import AppConfig from "@/Layouts/layout/AppConfig.jsx";
 import { LayoutContext } from "./context/layoutcontext";
 import { PrimeReactContext } from "primereact/api";
+import { UserProvider } from "./context/usercontext";
+
 // import { usePathname, useSearchParams } from "next/navigation";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, user }) => {
+
     const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
     const { setRipple } = useContext(PrimeReactContext);
     const topbarRef = useRef(null);
     const sidebarRef = useRef(null);
-
+ 
     const [bindMenuOutsideClickListener, unbindMenuOutsideClickListener] =
         useEventListener({
             type: "click",
@@ -141,7 +144,9 @@ const Layout = ({ children }) => {
     return (
         <React.Fragment>
             <div className={containerClass}>
-                <AppTopbar ref={topbarRef} />
+                <UserProvider user={user}>
+                <AppTopbar ref={topbarRef}/>
+                </UserProvider>
                 <div ref={sidebarRef} className="layout-sidebar bg-violet-300">
                     <AppSidebar />
                 </div>

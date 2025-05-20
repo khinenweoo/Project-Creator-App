@@ -178,7 +178,7 @@ export default function Create({ projects, users }) {
 
                                         <div className="col-12 mt-4 text-right flex justify-content-end gap-3">
                                             <Link 
-                                                href={route("project.index")}
+                                                href={route("projects.index")}
                                                 className=""
                                             >
                                                 <Button label="Cancel" type="button" className="p-button-outlined mr-2" />

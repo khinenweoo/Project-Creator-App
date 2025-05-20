@@ -27740,7 +27740,6 @@ a {
     }
     .layout-topbar .layout-menu-button {
         margin-left: 0;
-        order: 1;
     }
     .layout-topbar .layout-topbar-menu-button {
         display: inline-flex;

@@ -21,21 +21,21 @@ export default function Index({ members, queryParams = null, success }) {
   }
 
   const deleteMember = (member) => {
-      if (!window.confirm('Are you sure you want to delete the project?')) {
+      if (!window.confirm('Are you sure you want to delete the member?')) {
           return;
       }
-      router.delete(route('project.destroy', member.id));
+      router.delete(route('member.destroy', member.id));
   }
 
   return (
     <Layout>
-      <Head title="Projects" />
+      <Head title="Members" />
       <div className="grid">
         <div className="col-12">
           <div className="card">
             <div className="flex flex-row justify-content-between border-bottom-1 surface-border pb-4">
               <div>
-                <div className="font-medium text-3xl text-900">Projects</div>
+                <div className="font-medium text-3xl text-900">Members</div>
               </div>
               <div className="flex md:justify-content-end align-items-center lg:mt-0">
                 <Link href={route('member.create')} >

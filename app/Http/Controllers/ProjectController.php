@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TasksResource;
+use App\Http\Resources\UserCrudResource;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -19,6 +20,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
+        $authUser = auth()->user();
         $query = Project::query();
 
         $sortField = request("sort_field", 'created_at');
@@ -33,7 +35,7 @@ class ProjectController extends Controller
         }
 
         $projects = $query->orderBy($sortField, $sortDirection)
-            ->paginate(10) ?? [];
+            ->paginate(12) ?? [];
 
 
         foreach ($projects as $key => $project) {
@@ -63,6 +65,7 @@ class ProjectController extends Controller
             "projects" => ProjectResource::collection($projects),
             "queryParams" => request()->query() ?: null,
             'success' => session('success'),
+            'user' => new UserCrudResource($authUser),
         ]);
     }
 
@@ -91,7 +94,7 @@ class ProjectController extends Controller
 
         Project::create($data);
 
-        return to_route('project.index')->with('success', 'Project was created successfully.');
+        return to_route('projects.index')->with('success', 'Project was created successfully.');
     }
 
     /**
@@ -152,7 +155,7 @@ class ProjectController extends Controller
         }
         $project->update($data);
 
-        return to_route('project.index')
+        return to_route('projects.index')
             ->with('success', "Project \"$project->name\" was updated");
     }
 
@@ -166,6 +169,6 @@ class ProjectController extends Controller
         if ($project->image_path) {
             Storage::disk('public')->deleteDirectory(dirname($project->image_path));
         }
-        return to_route('project.index')->with('success', "Project \"$name\" was deleted");
+        return to_route('projects.index')->with('success', "Project \"$name\" was deleted");
     }
 }

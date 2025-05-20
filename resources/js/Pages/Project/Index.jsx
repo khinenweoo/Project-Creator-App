@@ -6,7 +6,7 @@ import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
 import { Button } from "primereact/button";
 
-export default function Index({ auth, projects, queryParams = null, success }) {
+export default function Index({ user, projects, queryParams = null, success }) {
     queryParams = queryParams || {};
 
     const searchFieldChanged = (name, value) => {
@@ -16,7 +16,7 @@ export default function Index({ auth, projects, queryParams = null, success }) {
             delete queryParams[name]
         }
 
-        router.get(route('project.index'), queryParams);
+        router.get(route('projects.index'), queryParams);
     };
 
     const onKeyPress = (name, e) => {
@@ -34,7 +34,7 @@ export default function Index({ auth, projects, queryParams = null, success }) {
 
 
     return (
-        <Layout>
+        <Layout user={user.data}>
             <Head title="Projects" />
             <div className="grid">
                 <div className="col-12">
@@ -44,7 +44,7 @@ export default function Index({ auth, projects, queryParams = null, success }) {
                                 <div className="font-medium text-3xl text-900">Projects</div>
                             </div>
                             <div className="flex md:justify-content-end align-items-center lg:mt-0">
-                                    <Link href={route('project.create')} >
+                                    <Link href={route('projects.create')} >
                                             <Button label="Create Project" type="button" className="p-button-outlined mr-2" icon="pi pi-plus-circle" />
                                     </Link>
                             </div>

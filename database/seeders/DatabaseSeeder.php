@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'Khine',
             'email' => 'khine@example.com',
             'password' => bcrypt('123.devUserA'),
-            'email_verified_at' => time()
+            'email_verified_at' => time(),
+            'is_admin' => 1,
         ]);
 
         User::factory()->create([
@@ -31,7 +32,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'Steven',
             'email' => 'steven@example.com',
             'password' => bcrypt('123.devUserB'),
-            'email_verified_at' => time()
+            'email_verified_at' => time(),
+            'is_admin' => 1,
         ]);
 
         Project::factory()

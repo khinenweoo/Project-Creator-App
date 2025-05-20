@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,10 +32,12 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth', 'verified'])->group(function() {
-    Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
-     ->name('dashboard');
 
-     Route::resource('project', ProjectController::class)->only(['index', 'create', 'store', 'update']);
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])
+     ->name('dashboard');
+    Route::get('/activeuser', [DashboardController::class, 'getUser']);
+
+     Route::resource('projects', ProjectController::class)->only(['index', 'create', 'store']);
      Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('project.show');
      Route::get('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('project.edit');
      Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('project.update');

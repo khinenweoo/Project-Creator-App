@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 import Pagination from "@/Components/Pagination";
 import { useState } from "react";
 
-export default function Index({ users, queryParams = null, success }) {
+export default function Index({ auth, users, queryParams = null, success }) {
 
 
   const searchFieldChanged = (name, value) => {
@@ -38,7 +38,7 @@ export default function Index({ users, queryParams = null, success }) {
   }
 
   return (
-    <Layout>
+    <Layout user={auth.data}>
       <Head title="Members" />
       <div className="grid">
         <div className="col-12">

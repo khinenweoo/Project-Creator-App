@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserCrudResource;
 use Carbon\Carbon;
 use App\Models\Project;
 use App\Models\User;
@@ -22,6 +23,7 @@ class TaskController extends Controller
      */
     public function index()
     {
+        $authUser = auth()->user();
         $query = Task::query();
 
         $sortField = request("sort_field", 'created_at');
@@ -52,9 +54,9 @@ class TaskController extends Controller
             $days_duration = '';
             if ($month_duration < 1) {
                 // $days_duration = $due_date->addDays() . ' Days';
-                $days_duration = $due_date->diffInDays() . 'Days';
+                $days_duration = $due_date->diffInDays() . ' Days';
             }
-            $task->duration = $days_duration != '' ? $days_duration : $month_duration . ' Month';
+            $task->duration = $days_duration != '' ? $days_duration : $month_duration . ' Months';
         }
 
 
@@ -62,6 +64,7 @@ class TaskController extends Controller
             "tasks" => TaskResource::collection($tasks),
             "queryParams" => request()->query() ?: null,
             "success" => session('success'),
+            'user' => new UserCrudResource($authUser),
         ]);
     }
 

@@ -8,7 +8,7 @@ import Checkbox from "@/Components/Checkbox";
 import '../../../css/project.css';
 import { Button } from "primereact/button";
 
-export default function Index({ auth, tasks, queryParams = null, success }) {
+export default function Index({ user, tasks, queryParams = null, success }) {
     queryParams = queryParams || {};
 
     const searchFieldChanged = (name, value) => {
@@ -40,7 +40,7 @@ export default function Index({ auth, tasks, queryParams = null, success }) {
     }
 
     return (
-        <Layout>
+        <Layout user={user.data}>
             <Head title="Projects" />
             <div className="grid">
                 <div className="col-12">

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserCrudResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -17,6 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $query = User::query();
+        $authUser = auth()->user();
 
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
@@ -36,6 +38,7 @@ class UserController extends Controller
             "users" => UserResource::collection($users),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
+            'auth' => new UserCrudResource($authUser),
         ]);
     }
 
