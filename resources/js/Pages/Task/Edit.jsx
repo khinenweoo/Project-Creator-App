@@ -6,30 +6,36 @@ import { InputTextarea } from "primereact/inputtextarea";
 import InputError from "../../Components/InputError";
 import { Button } from "primereact/button";
 
-export default function Create({ projects, users }) {
+export default function Edit({ auth, task, projects, users }) {
 
-    const { data, setData, post, errors, reset } = useForm({
-        name: "",
-        image: "",
-        status: "",
-        priority: "",
-        due_date: "",
-        description: "",
-        project_id: "",
-        assigned_user_id: "",
+    const taskData = task?.data || task || {};
+    const taskId = task?.data.id || task.id;
+    const statusOptions = [
+        { name: 'pending', code: 'pending' },
+        { name: 'in_progress', code: 'in_progress' },
+        { name: 'completed', code: 'completed' },
+    ];
+    const initialStatusOption = statusOptions.find(s => s.code === taskData.status) || null;
+
+    const { data, setData, post, errors } = useForm({
+        name: taskData.name || "",
+        image: null,
+        image_path: taskData.image_path || null,
+        status: taskData.status || "",
+        priority: taskData.priority || "",
+        due_date: taskData.end_date || "",
+        description: taskData.description || "",
+        project_id: taskData.project?.id || "",
+        assigned_user_id: taskData.assignedUser?.id || "",
+        _method: "PUT",
     });
-
 
     const projectOptions = projects.data.map(project => ({
         id: project.id,
         name: project.name,
     }));
 
-    const statusOptions = [
-        { name: 'pending', code: 'pending' },
-        { name: 'in_progress', code: 'in_progress' },
-        { name: 'completed', code: 'completed' },
-    ];
+
     const PriorityOptions = [
         { name: 'Highest', code: 'highest' },
         { name: 'Medium', code: 'medium' },
@@ -49,21 +55,39 @@ export default function Create({ projects, users }) {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        post(route("task.store"));
+        console.log("Form Data:", data);
+        const submitData = {
+            ...data,
+            update_status: data.status ? data.status.code : "",
+        };
+
+        post(route("task.update", taskId), {
+            task: submitData,
+        });
     };
 
 
     return (
-        <Layout>
-            <Head title="Project Create" />
+        <Layout user={auth.data}>
+            <Head title="Task Edit" />
             <div className="card">
                 <section className="max-w-xl">
                     <header>
-                        <h2 className="text-lg font-medium">Create New Task</h2>
+                        <h2 className="text-lg font-medium">Edit Task</h2>
+                        <p className="mt-1 text-sm text-gray-600">
+                            Edit your task "{taskData.name}".
+                        </p>
                     </header>
 
                     <form onSubmit={onSubmit} className="mt-4 space-y-6">
                         <div className="p-fluid formgrid grid">
+                            <div className="mb-3 col-12 md:col-12">
+                                {data.image_path && (
+                                    <div className="mb-2 flex flex-wrap justify-content-start ">
+                                        <img src={data.image_path} alt="Task Image" className="w-12rem h-12rem border-round border-teal-600" />
+                                    </div>
+                                )}
+                            </div>
                             <div className="mb-3 col-12 md:col-6">
                                 <label htmlFor="image" className="block text-900 font-medium mb-2">Task Image</label>
                                 <InputText
@@ -171,12 +195,13 @@ export default function Create({ projects, users }) {
                                 >
                                     <Button label="Cancel" type="button" className="p-button-outlined mr-2" />
                                 </Link>
-                                <Button label="Create" type="submit" severity="info" className="w-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-600 active:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" icon="pi pi-check" />
+                                <Button label="Update" type="submit" severity="info" className="w-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-600 active:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" icon="pi pi-check" />
                             </div>
                         </div>
                     </form>
                 </section>
             </div>
+
         </Layout>
     );
 }

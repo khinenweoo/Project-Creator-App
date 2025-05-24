@@ -34,10 +34,9 @@ export default function Register() {
             <Head title="Register" />
 
             <div className="flex align-items-center justify-content-center flex-column">
-                <img src="/images/logo/-dark.svg" alt="hyper" height={50} className="mb-3"/>
                 <div className="surface-card p-6 sm:p-4 shadow-2 border-round w-full lg:w-4">
                     <div className="text-center mb-5">
-                        <div className="text-900 text-3xl font-medium mb-3">Register</div>
+                        <div className="text-800 text-gray-700 text-lg font-medium mb-3">Become a member</div>
                     </div>
                     <form onSubmit={submit}>
                         <div>

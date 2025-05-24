@@ -15,11 +15,17 @@ class DashboardController extends Controller
         $authUser = auth()->user();
         $projectCount = Project::count();
         $taskCount = Task::count();
+
+
+        $progressProjects = Project::where('status', 'in_progress')->count();
+        $completedProjects = Project::where('status', 'completed')->count();
     
         return inertia('Dashboard', [
             'user' => new UserCrudResource($authUser),
             'total_projects' => $projectCount,
             'total_tasks' => $taskCount,
+            'progress_projects' => $progressProjects,
+            'completed_projects' => $completedProjects,
         ]);
         
     }

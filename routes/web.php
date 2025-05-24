@@ -44,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
      Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('project.destroy');
      
      Route::resource('task', TaskController::class);
+     Route::put('/task/{taskId}/complete', [TaskController::class, 'updateStatus'])->name('task.complete');
      Route::resource('user', UserController::class);
      Route::resource('member', MemberController::class);
 

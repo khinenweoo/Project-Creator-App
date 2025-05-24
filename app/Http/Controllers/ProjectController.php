@@ -74,7 +74,10 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return inertia("Project/Create");
+        $authUser = auth()->user();
+        return inertia("Project/Create", [
+            'auth' => new UserCrudResource($authUser),
+        ]);
     }
 
     /**
@@ -131,8 +134,10 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        $authUser = auth()->user();
         return inertia('Project/Edit', [
-            'project' => new ProjectResource($project)
+            'project' => new ProjectResource($project),
+            'auth' => new UserCrudResource($authUser),
         ]);
     }
 

@@ -48,7 +48,7 @@ const AppTopbar = forwardRef(({ user }, ref) => {
             </button>
             <div className='flex flex-column'>
             <span className='hidden md:block text-md font-medium text-gray-900 ml-3'>{userState? userState.username: ''}</span>
-            <span className='hidden md:block text-sm text-gray-900 ml-3'>{userState? 'Admin Profile': ''}</span>
+            <span className='hidden md:block text-sm text-gray-900 ml-3'>{userState.is_admin === 1? 'Admin Profile': 'Member Profile'}</span>
             </div>
 
 

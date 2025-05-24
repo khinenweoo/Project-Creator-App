@@ -21,9 +21,14 @@ export default function Index({ user, tasks, queryParams = null, success }) {
         router.get(route("task.index"), queryParams);
     };
 
-    const taskCheckBoxChange = (e) => {
-        let value = e.target.value;
-        console.log(value);
+    const taskCheckBoxChange = (taskId, e) => {
+        if (!window.confirm('Do you want to complete the task?')) {
+            retrun;
+        }
+        const isChecked = e.target.checked;
+
+        // send request to update the task status
+        router.put(route("task.complete", { taskId }), { completed: isChecked });
     }
 
     const onKeyPress = (name, e) => {
@@ -130,13 +135,8 @@ export default function Index({ user, tasks, queryParams = null, success }) {
                                             }>
                                                     <div className="flex justify-content-between p-3">
                                                         <div className="mt-2 w-full pr-2">
-                                                            <h6 className="font-medium text-600 hover:underline text-wrap mb-0">
-                                                                <Link
-                                                                    href={route("task.show", { task: task.id })}
-                                                                    className="text-gray-900"
-                                                                >
-                                                                    {task.name}
-                                                                </Link>
+                                                            <h6 className="font-medium text-600 text-wrap mb-0">
+                                                                {task.name}
                                                             </h6>
                                                         </div>
                                                         <div className="flex align-items-center justify-content-center">
@@ -145,7 +145,7 @@ export default function Index({ user, tasks, queryParams = null, success }) {
                                                                 <Checkbox 
                                                                 type="checkbox" 
                                                                 checked={task.status === "completed"}
-                                                                onChange={(e) => {taskCheckBoxChange(e)}}
+                                                                onChange={(e) => {taskCheckBoxChange(task.id, e)}}
                                                                 />
                                                                 <span className="checkmark"></span>
                                                                 </label>

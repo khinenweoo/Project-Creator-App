@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -75,10 +76,12 @@ class TaskController extends Controller
     {
         $projects = Project::query()->orderBy('name', 'asc')->get();
         $users = User::query()->orderBy('name', 'asc')->get();
+        $authUser = auth()->user();
 
         return inertia("Task/Create", [
             'projects' => ProjectResource::collection($projects),
             'users' => UserResource::collection($users),
+            'auth' => new UserCrudResource($authUser),
         ]);
     }
 
@@ -114,7 +117,17 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        $projects = Project::query()->orderBy('name', 'asc')->get();
+        $users = User::query()->orderBy('name', 'asc')->get();
+        $authUser = auth()->user();
+        $projects =  ProjectResource::collection($projects);
+
+        return inertia("Task/Edit", [
+            'task' => new TaskResource($task),
+            'projects' => ProjectResource::collection($projects),
+            'users' => UserResource::collection($users),
+            'auth' => new UserCrudResource($authUser),
+        ]);
     }
 
     /**
@@ -122,7 +135,27 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        $data = $request->validated();
+        $image = $data['image'] ?? null;
+        $data['updated_by'] = Auth::id();
+        if ($image) {
+            $data['image_path'] = $image->store('task/' . Str::random(), 'public');
+            
+        }
+        $task->update($data);
+
+        return to_route('task.index')
+            ->with('success', "Task \"$task->name\" was updated");
+    }
+
+    public function updateStatus(Request $request, $taskId)
+    {
+        $task = Task::findOrFail($taskId);
+        $task->status = $request->completed ? 'completed' : $task->status;
+        $task->save();
+
+        return to_route('task.index')
+            ->with('success', "Task \"$task->name\" was completed.");
     }
 
     /**
@@ -130,6 +163,11 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $name = $task->name;
+        $task->delete();
+        if ($task->image_path) {
+            Storage::disk('public')->deleteDirectory(dirname($task->image_path));
+        }
+        return to_route('task.index')->with('success', "Task \"$name\" was deleted");
     }
 }

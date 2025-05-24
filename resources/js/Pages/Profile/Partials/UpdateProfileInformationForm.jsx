@@ -2,7 +2,7 @@ import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import {InputText} from "primereact/inputtext";
+import { InputText } from "primereact/inputtext";
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
     const user = usePage().props.auth.user;
@@ -39,7 +39,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
                     />
-                    <InputError message={errors.email} className=""/>
+                    <InputError message={errors.email} className="" />
                 </div>
 
                 <div className="mb-3">
@@ -52,7 +52,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         value={data.email}
                         onChange={(e) => setData('email', e.target.value)}
                     />
-                    <InputError message={errors.email} className=""/>
+                    <InputError message={errors.email} className="" />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (
@@ -78,7 +78,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 )}
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                    <PrimaryButton disabled={processing} icon="pi pi-check">Save</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}

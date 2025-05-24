@@ -18,7 +18,7 @@ ChartJS.register(
     Tooltip
 );
 
-const Dashboard = ({ user, total_projects, total_tasks }) => {
+const Dashboard = ({ user, total_projects, total_tasks, progress_projects, completed_projects }) => {
     const menu1 = useRef(null);
     const menu2 = useRef(null);
     const documentStyle = getComputedStyle(document.documentElement);
@@ -142,12 +142,13 @@ const Dashboard = ({ user, total_projects, total_tasks }) => {
                 >
                 </DashboardInfoCard>
                 <DashboardInfoCard title="Progress Projects"
-                                   value="74"
+                                   value={progress_projects}
                                    icon="sort-amount-up"
                                    iconColor="orange"
                 >
                 </DashboardInfoCard>
-                <DashboardInfoCard title="Completed Projects" value="122"
+                <DashboardInfoCard title="Completed Projects" 
+                                   value={completed_projects}
                                    icon="inbox"
                                    iconColor="cyan"
                 >

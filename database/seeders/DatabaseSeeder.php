@@ -13,32 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-        User::factory()->create([
-            'id' => 1,
-            'user_id'=> 'M00001',
-            'name' => 'Khine Nwe',
-            'username' => 'Khine',
-            'email' => 'khine@example.com',
-            'password' => bcrypt('123.devUserA'),
-            'email_verified_at' => time(),
-            'is_admin' => 1,
+        $this->call([
+            UserSeeder::class,
         ]);
 
-        User::factory()->create([
-            'id' => 2,
-            'user_id'=> 'M00002',
-            'name' => 'Steven Powell',
-            'username' => 'Steven',
-            'email' => 'steven@example.com',
-            'password' => bcrypt('123.devUserB'),
-            'email_verified_at' => time(),
-            'is_admin' => 1,
-        ]);
 
         Project::factory()
-            ->count(30)
-            ->hasTasks(30)
+            ->count(12)
+            ->hasTasks(2)
             ->create();
     }
 }

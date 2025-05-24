@@ -20,6 +20,7 @@ class UserCrudResource extends JsonResource
             "id" => $this->id,
             "username" => $this->username,
             "profile_image" => $this->profile_image? Storage::url($this->profile_image) : '',
+            "is_admin" => $this->is_admin,
         ];
     }
 }

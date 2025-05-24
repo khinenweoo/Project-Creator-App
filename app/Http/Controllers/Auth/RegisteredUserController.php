@@ -37,7 +37,18 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $lastUserId = User::orderBy('id', 'desc')->first()?->user_id;
+        if (isset($lastUserId)) {
+            // Extract numeric part by removing the prefix 'M'
+            $idNumeric =  (int) substr($lastUserId, 1);
+            $newIdNumber = $idNumeric + 1; // format in the helper function
+        } else {
+            $newIdNumber = 1;
+        }
+        $generatedId = generateUserId($newIdNumber);
+
         $user = User::create([
+            'user_id' => $generatedId,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),

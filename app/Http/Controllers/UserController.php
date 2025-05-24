@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserCrudResource;
+use App\Http\Resources\UserEditResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -110,7 +111,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         return inertia('User/Edit', [
-            'user' => new UserObjectResource($user),
+            'user' => new UserEditResource($user),
         ]);
     }
 
