@@ -10,16 +10,19 @@ import { TASK_STATUS_CLASS_MAP } from "@/constants";
 
 export default function TasksTable({ tasks, queryParams = null, hideProjectColumn = false }) {
     queryParams = queryParams || {};
+    console.log("Tasks", tasks.data.length);
 
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setLoading(true);
-        if (tasks.data.length > 0) {
+        const timer = setTimeout(() => {
             setLoading(false);
-        }
+        }, 2000);
 
-    }, [loading]);
+        // cleanup function to clear the timeout
+        return () => clearTimeout(timer);
+
+    }, []);
 
     const searchFieldChange = (name, value) => {
 

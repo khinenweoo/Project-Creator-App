@@ -124,7 +124,7 @@ export default function Index({ auth, users, queryParams = null, success }) {
                                   </div>
                                 </div>
                               </div>
-                              <div className="btn-group mt-2">
+                              {auth.data.is_admin === 1 && (<div className="btn-group mt-2">
                                 <Link href={route('user.edit', { user: user.id })}>
                                   <button type="button" className="p-button p-component p-button-icon-only p-button-outlined p-button-success mr-2">
                                     <i className="pi pi-file-edit" />
@@ -137,7 +137,7 @@ export default function Index({ auth, users, queryParams = null, success }) {
                                 >
                                   <i className="pi pi-trash" />
                                 </button>
-                              </div>
+                              </div>)}
                             </div>
                           </div>
                         </div>

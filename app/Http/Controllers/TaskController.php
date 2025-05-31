@@ -42,9 +42,17 @@ class TaskController extends Controller
             $query->where("priority", "like", "%" . request("priority") . "%");
         }
 
-        $tasks = $query->orderBy($sortField, $sortDirection)
-            ->paginate(12)
-            ->onEachSide(1);
+        if ($authUser->is_admin === 0) {
+            $tasks = $authUser->tasks()? $authUser->tasks()->orderBy($sortField, $sortDirection)
+                ->paginate(12)
+                : [];
+
+        } else {
+            $tasks = $query->orderBy($sortField, $sortDirection)
+                ->paginate(12)
+                ->onEachSide(1);
+        }
+
 
         foreach ($tasks as $key => $task) {
             $created_date = Carbon::parse($task->created_at);
@@ -74,13 +82,25 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $projects = Project::query()->orderBy('name', 'asc')->get();
-        $users = User::query()->orderBy('name', 'asc')->get();
         $authUser = auth()->user();
+        $query = User::query();
+        $users = [];
+        $assigned_user = null;
+
+
+        // only show projects for the current user if user is not admin
+        if ($authUser->is_admin === 0) {
+            $projects = $authUser->projects()? $authUser->projects()->orderBy('name', 'asc')->get() : [];
+            $assigned_user = User::where('id', $authUser->id)->first();
+        } else {
+            $projects = Project::query()->orderBy('name', 'asc')->get();
+            $users = $query->orderBy('name', 'asc')->get();
+        }
 
         return inertia("Task/Create", [
             'projects' => ProjectResource::collection($projects),
-            'users' => UserResource::collection($users),
+            'users' => count($users) > 0? UserResource::collection($users): [],
+            'assigned_user' => $assigned_user,
             'auth' => new UserCrudResource($authUser),
         ]);
     }
@@ -117,15 +137,25 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        $projects = Project::query()->orderBy('name', 'asc')->get();
-        $users = User::query()->orderBy('name', 'asc')->get();
         $authUser = auth()->user();
-        $projects =  ProjectResource::collection($projects);
+        $query = User::query();
+        $users = [];
+        $assigned_user = null;
+
+        if ($authUser->is_admin === 0) {
+            $projects = $authUser->projects()? $authUser->projects()->orderBy('name', 'asc')->get() : [];
+            $assigned_user = User::where('id', $authUser->id)->first();
+            array_push($users, $assigned_user);
+        } else {
+            $projects = Project::query()->orderBy('name', 'asc')->get();
+            $users = $query->orderBy('name', 'asc')->get();
+        }
 
         return inertia("Task/Edit", [
             'task' => new TaskResource($task),
             'projects' => ProjectResource::collection($projects),
-            'users' => UserResource::collection($users),
+            'users' => count($users) > 0?  UserResource::collection($users): [],
+            'assigned_user' => $assigned_user,
             'auth' => new UserCrudResource($authUser),
         ]);
     }

@@ -6,7 +6,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import InputError from "../../Components/InputError";
 import { Button } from "primereact/button";
 
-export default function Create({ projects, users }) {
+export default function Create({ auth, projects, users, assigned_user }) {
 
     const { data, setData, post, errors, reset } = useForm({
         name: "",
@@ -16,7 +16,7 @@ export default function Create({ projects, users }) {
         due_date: "",
         description: "",
         project_id: "",
-        assigned_user_id: "",
+        assigned_user_id: assigned_user ? assigned_user.id : "",
     });
 
 
@@ -37,10 +37,15 @@ export default function Create({ projects, users }) {
         { name: 'Lowest', code: 'lowest' },
     ];
 
-    const assignUserOptions = users.data.map(user => ({
+    const assignUserOptions = users.length > 0
+    ? users.data.map(user => ({
         id: user.id,
         name: user.name,
-    }));
+    }))
+    : [{
+        id: assigned_user.id,
+        name: assigned_user.name,
+    }];
 
 
     const setProject = (value) => {
@@ -54,8 +59,8 @@ export default function Create({ projects, users }) {
 
 
     return (
-        <Layout>
-            <Head title="Project Create" />
+        <Layout user={auth.data}>
+            <Head title="Create" />
             <div className="card">
                 <section className="max-w-xl">
                     <header>

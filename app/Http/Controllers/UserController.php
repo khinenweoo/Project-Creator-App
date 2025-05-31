@@ -121,16 +121,14 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->validated();
-        $password = $data['password'] ?? null;
-        if ($password) {
-            $data['password'] = bcrypt($password);
-        } else {
-            unset($data['password']);
+        $image = $data['new_profile'] ?? null;
+        if($image) {
+            $data['profile_image'] = $image->store('user/'.Str::random(), 'public');
         }
         $user->update($data);
 
         return to_route('user.index')
-            ->with('success', "User \"$user->name\" was updated");
+            ->with('success', "User \"$user->name\" was updated.");
     }
 
     /**

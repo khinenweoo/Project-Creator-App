@@ -10,9 +10,9 @@ export default function Show({ auth, project, tasks, queryParams }) {
             <Head title="Project View" />
             <div className='block-viewer'>
                 <div className='block-section'>
-                    <div className='block-header'>
+                    <div className="block-header">
                         <div className="block-title">
-                            <h4>Project Detail</h4>
+                            <span className='text-lg'>Project Detail</span>
                         </div>
                     </div>
                     <div className='block-content'>
@@ -20,11 +20,13 @@ export default function Show({ auth, project, tasks, queryParams }) {
                             <div className="col-12">
                                 <div className=" mx-auto">
                                     <div className='overflow-hidden mx-4 my-4 flex flex-column md:flex-row justify-content-around align-items-center'>
-                                        <div className="flex-1 relative shadow-mdrounded-md md:mr-3">
-                                            <img src={project.data.image_path}
-                                                alt=""
-                                                className="w-auto h-full md:h-18rem"
-                                            />
+                                        <div className="flex-1 relative shadow-mdrounded-md md:mr-4">
+
+                                            {project.data.image_path && (
+                                                <div className="mb-4">
+                                                    <img src={project.data.image_path} alt="Project" className="w-full h-20rem border-round" />
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="flex-1 text-gray-900 dark:text-gray-100">
                                             <div className='title'>

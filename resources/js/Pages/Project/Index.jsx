@@ -38,7 +38,7 @@ export default function Index({ user, projects, queryParams = null, success }) {
             <Head title="Projects" />
             <div className="grid">
                 <div className="col-12">
-                    <div className="card">
+                    <div className="card min-h-screen">
                         <div className="flex flex-row justify-content-between border-bottom-1 surface-border pb-4">
                             <div>
                                 <div className="font-medium text-3xl text-900">Projects</div>
@@ -86,7 +86,10 @@ export default function Index({ user, projects, queryParams = null, success }) {
                             {/* project data content */}
                             <div className="p-dataview-content" data-pc-section="content">
                                 <div className="p-grid grid p-nogutter grid-nogutter" data-pc-section="grid">
-                                    {projects.data.map((project) => (
+                                    { projects.data.length === 0 && (
+                                        <p className="m-2 text-md text-indigo-300">No Project Available...</p>
+                                    )}
+                                    {projects.data.length !== 0 && projects.data.map((project) => (
                                         <div className="col-12 lg:col-4" key={project.id}>
                                             <div className="card m-1 px-3 border-1 surface-border">
                                                 <div className="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
@@ -123,7 +126,7 @@ export default function Index({ user, projects, queryParams = null, success }) {
                                                             <div className="flex align-items-center justify-content-center border-round w-4 h-2">
                                                                 <i className="pi pi-users text-xl"></i>
                                                             </div>
-                                                            <span>2 Members</span>
+                                                            <span>{project.assigned_users} Members</span>
                                                         </div>
                                                     </div>
                                                     <div className="col-6">
@@ -166,7 +169,9 @@ export default function Index({ user, projects, queryParams = null, success }) {
                                         </div>
                                     ))}
                                 </div>
-                                <Pagination links={projects.meta.links} />
+                                { projects.meta.links &&
+                                    (<Pagination links={projects.meta.links} />)
+                                }
                             </div>
                         </div>
                     </div>

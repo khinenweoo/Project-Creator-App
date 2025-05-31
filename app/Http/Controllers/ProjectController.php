@@ -33,9 +33,17 @@ class ProjectController extends Controller
         if (request("status")) {
             $query->where("status", request("status"));
         }
+        
+        // show only posts that assigned to the auth user
+        if ($authUser->is_admin == 0) {
+            $projects = $authUser->projects()? $authUser->projects()->orderBy($sortField, $sortDirection)
+                ->paginate(12)
+                : [];
 
-        $projects = $query->orderBy($sortField, $sortDirection)
-            ->paginate(12) ?? [];
+        } else {
+            $projects = $query->orderBy($sortField, $sortDirection)
+                ->paginate(12) ?? [];
+        }
 
 
         foreach ($projects as $key => $project) {
@@ -59,6 +67,16 @@ class ProjectController extends Controller
         
             // tasks count
             $project->tasks_count = $project->tasks->count();
+            $assignUserCount = 0;
+
+            foreach ($project->tasks as $key => $task) {
+
+                if ($task->assignedUser) {
+                    $assignUserCount += 1;
+                }
+            }
+            // assigned user count
+            $project->assign_users = $assignUserCount;
         }
             
         return inertia("Project/Index", [

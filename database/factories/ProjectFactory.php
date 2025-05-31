@@ -36,7 +36,7 @@ class ProjectFactory extends Factory
             'description' => fake()->realText(),
             'due_date' => fake()->dateTimeBetween('now', '+1year'),
             'status' => fake()->randomElement(['pending', 'in_progress', 'completed']),
-            'image_path' => fake()->imageUrl(),
+            'image_path' => fake()->randomElement(['/project/proj1.jpg', '/project/proj2.jpg', '/project/proj3.jpg']),
             'created_by' => fake()->randomElement([1,2]),
             'updated_by' => fake()->randomElement([1,2]),
             'created_at' => time(),

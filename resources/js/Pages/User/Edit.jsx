@@ -8,6 +8,8 @@ import { Button } from "primereact/button";
 export default function Edit({ user }) {
 
     const userData = user?.data || user || {};
+    const userId = user?.data.id || user.id;
+
     const { data, setData, post, errors, reset } = useForm({
         name: userData.name || '',
         email: userData.email || '',
@@ -20,6 +22,7 @@ export default function Edit({ user }) {
         occupation: userData.occupation || '',
         department: userData.department || '',
         description: userData.description || '',
+        _method: "PUT",
     });
 
     const status = [
@@ -34,8 +37,12 @@ export default function Edit({ user }) {
 
         console.log("Entry Data: ", data);
 
-        post(route("user.update"));
+        post(route("user.update", userId), {
+            user: data,
+        });
     };
+
+    
     return (
         <Layout>
             <Head title="User Edit" />
@@ -66,11 +73,11 @@ export default function Edit({ user }) {
                                 <InputText
                                     id="profile"
                                     type="file"
-                                    name="profile_image"
+                                    name="new_profile"
                                     className="block w-full"
-                                    onChange={(e) => setData("profile_image", e.target.files[0])}
+                                    onChange={(e) => setData("new_profile", e.target.files[0])}
                                 />
-                                <InputError message={errors.profile_image} className="" />
+                                <InputError message={errors.new_profile} className="" />
                             </div>
                             <div className="mb-3 col-12 md:col-6">
                                 <label htmlFor="email" className="block text-900 font-medium mb-2">Name</label>

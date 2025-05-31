@@ -46,10 +46,10 @@ export default function Index({ user, tasks, queryParams = null, success }) {
 
     return (
         <Layout user={user.data}>
-            <Head title="Projects" />
+            <Head title="Tasks" />
             <div className="grid">
                 <div className="col-12">
-                    <div className="card">
+                    <div className="card min-h-screen">
                         <div className="flex flex-row justify-content-between border-bottom-1 surface-border pb-4">
                             <div>
                                 <div className="font-medium text-3xl text-900">Tasks</div>
@@ -126,7 +126,10 @@ export default function Index({ user, tasks, queryParams = null, success }) {
                                     className="grid"
                                     data-pc-section="grid"
                                 >
-                                    {tasks.data.map((task) => (
+                                    { tasks.data.length === 0 && (
+                                        <p className="m-2 text-md text-indigo-300">No Task Available...</p>
+                                    )}
+                                     {tasks.data.length !== 0 && tasks.data.map((task) => (
                                         <div className="col-12 md:col-6 lg:col-4" key={task.id}>
                                             <div className="surface-0 shadow-3 ">
                                             <div className={
@@ -227,7 +230,7 @@ export default function Index({ user, tasks, queryParams = null, success }) {
                                         </div>
                                     ))}
                                 </div>
-                                <Pagination links={tasks.meta.links} />
+                               {tasks.meta.links  && (<Pagination links={tasks.meta.links} />)}
                             </div>
                         </div>
                     </div>
