@@ -196,7 +196,7 @@ class TaskController extends Controller
         $name = $task->name;
         $task->delete();
         if ($task->image_path) {
-            Storage::disk('public')->deleteDirectory(dirname($task->image_path));
+            Storage::disk('r4')->deleteDirectory(dirname($task->image_path));
         }
         return to_route('task.index')->with('success', "Task \"$name\" was deleted");
     }
