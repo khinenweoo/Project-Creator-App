@@ -110,7 +110,7 @@ class ProjectController extends Controller
         $data['status'] = $data['status']['code'];
 
         if($image) {
-           $data['image_path'] = $image->store('project/'.Str::random(), 'public');
+           $data['image_path'] = $image->store('project/'.Str::random(), 'r4');
         }
 
         Project::create($data);
@@ -174,7 +174,7 @@ class ProjectController extends Controller
             if ($project->image_path) {
                 Storage::disk('r4')->deleteDirectory(dirname($project->image_path));
             }
-            $data['image_path'] = $image->store('project/' . Str::random(), 'public');
+            $data['image_path'] = $image->store('project/' . Str::random(), 'r4');
         }
         $project->update($data);
 

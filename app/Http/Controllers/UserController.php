@@ -74,7 +74,7 @@ class UserController extends Controller
         $data['user_id'] = $generatedId;
 
         if($image) {
-            $file_name = $image->store('user/'.Str::random(), 'public');
+            $file_name = $image->store('user/'.Str::random(), 'r4');
         }
 
         User::create([
@@ -123,7 +123,7 @@ class UserController extends Controller
         $data = $request->validated();
         $image = $data['new_profile'] ?? null;
         if($image) {
-            $data['profile_image'] = $image->store('user/'.Str::random(), 'public');
+            $data['profile_image'] = $image->store('user/'.Str::random(), 'r4');
         }
         $user->update($data);
 

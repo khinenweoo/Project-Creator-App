@@ -24,7 +24,7 @@ class UserEditResource extends JsonResource
             'joined_date' => (new Carbon($this->joined_date))->format('Y-m-d'), 
             'username' => $this->username,
             'phone_number' => $this->phone_number,
-            'profile_image' => $this->profile_image? Storage::disk('r4')->get($this->profile_image) : '',
+            'profile_image' => $this->profile_image? Storage::url($this->profile_image) : '',
             'company' => $this->company,
             'occupation' => $this->occupation,
             'department' => $this->department,

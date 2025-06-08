@@ -115,7 +115,7 @@ class TaskController extends Controller
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
         if ($image) {
-            $data['image_path'] = $image->store('task/' . Str::random(), 'public');
+            $data['image_path'] = $image->store('task/' . Str::random(), 'r4');
             
         }
         Task::create($data);
@@ -169,7 +169,7 @@ class TaskController extends Controller
         $image = $data['image'] ?? null;
         $data['updated_by'] = Auth::id();
         if ($image) {
-            $data['image_path'] = $image->store('task/' . Str::random(), 'public');
+            $data['image_path'] = $image->store('task/' . Str::random(), 'r4');
             
         }
         $task->update($data);
