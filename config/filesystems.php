@@ -43,6 +43,11 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+         'laravel_cloud' => [
+         'driver' => 'laravel-cloud',
+         'bucket' => env('LARAVEL_CLOUD_BUCKET', 'project_creator_app'),
+            'path_prefix' => env('LARAVEL_CLOUD_PATH_PREFIX', null),
+        ],
 
         's3' => [
             'driver' => 's3',

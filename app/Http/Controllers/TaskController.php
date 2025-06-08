@@ -94,7 +94,7 @@ class TaskController extends Controller
             $assigned_user = User::where('id', $authUser->id)->first();
         } else {
             $projects = Project::query()->orderBy('name', 'asc')->get();
-            $users = $query->orderBy('name', 'asc')->get();
+            $users = $query->orderBy('name', 'asc')->get();        
         }
 
         return inertia("Task/Create", [

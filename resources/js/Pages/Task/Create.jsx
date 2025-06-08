@@ -37,15 +37,16 @@ export default function Create({ auth, projects, users, assigned_user }) {
         { name: 'Lowest', code: 'lowest' },
     ];
 
-    const assignUserOptions = users.length > 0
+    const assignUserOptions = users
     ? users.data.map(user => ({
         id: user.id,
         name: user.name,
     }))
-    : [{
+    : assigned_user ? [{
         id: assigned_user.id,
         name: assigned_user.name,
-    }];
+    }]
+    : [];
 
 
     const setProject = (value) => {
