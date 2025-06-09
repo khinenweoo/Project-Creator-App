@@ -10,18 +10,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class ProjectFactory extends Factory
 {
     protected $projects = [
-        'Weekly Meal Prep Routine',
-        'Content Creation',
+        'Design Database Schema',
+        'Build Wireframes',
         'App Development',
-        'Networking Challenge',
-        'Monthly Progress Reviews',
-        'Learn to Cook 5 New Dishes',
-        'Gratitude Practice Project',
-        'Task Management System Setup',
-        'Side Hustle Starter Kit',
-        'Monthly Budget Reset',
-        'Daily Planning Habit',
-        'Vision Board Creation'
+        'Break Down Features',
+        'Unit Test Plans',
+        'Develop Responsive UI Components',
+        'Optimize Performance',
+        'User Feedback for Improvements',
+        'Deploy to Production',
     ];
     /**
      * Define the model's default state.

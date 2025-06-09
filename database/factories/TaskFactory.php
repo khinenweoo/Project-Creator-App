@@ -10,18 +10,16 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class TaskFactory extends Factory
 {
     protected $tasks = [
-        'Read 1 book/month',
-        'Track progress every Sunday',
-        'Sleep 7–8 hours/night',
+        'Implement Authentication Module',
+        'API Testing',
+        'Report & Log Bugs',
         'Build Backend features',
-        'Design a Personal Knowledge Base',
-        'Prototype Design',
-        'Create Basic Graphic Design',
-        'Weekly digital detox',
-        'Limit processed sugar to <25g/day',
-        'Stretch daily',
-        'Eat 3 servings of veggies & 2 fruits/day',
-        'Organize Digital Files',
+        'Update Documentation',
+        'Integrate Third-Party Services',
+        'Define Product Goals',
+        'Design Database Schema',
+        'Create Project Repo & Branch strategy',
+        'Deploy to Staging environment',
     ];
     /**
      * Define the model's default state.
@@ -30,7 +28,14 @@ class TaskFactory extends Factory
      */
     public function definition(): array
     {
-        $taskName = array_splice($this->tasks, array_rand($this->tasks), 1)[0];
+        $usedNames = [];
+        $taskNameIndex = array_rand($this->tasks);
+        $taskName = $this->tasks[$taskNameIndex];
+        // Ensure the task name is unique by appending a unique identifier
+        while (in_array($taskName, $usedNames)) {
+            $taskName = $this->tasks[$taskNameIndex] . ' ' . uniqid();
+        }
+        $usedNames[] = $taskName;
 
         return [
             'name' => $taskName,

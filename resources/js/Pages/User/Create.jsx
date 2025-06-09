@@ -5,7 +5,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import InputError from "../../Components/InputError";
 import { Button } from "primereact/button";
 
-export default function Create({ }) {
+export default function Create({ auth }) {
 
     const { data, setData, post, errors, reset } = useForm({
         name: '',
@@ -37,7 +37,7 @@ export default function Create({ }) {
         post(route("user.store"));
     };
     return (
-        <Layout>
+        <Layout user={auth.data}>
             <Head title="User Create" />
             <div className="card">
                 <section className="max-w-xl">

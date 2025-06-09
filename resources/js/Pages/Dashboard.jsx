@@ -37,7 +37,7 @@ const Dashboard = ({ user, total_projects, total_tasks, progress_projects, compl
             labels: ['Development', 'Prototyping', 'Infography', 'Mobile App', 'Design'],
             datasets: [
                 {
-                    label: 'Justin',
+                    label: 'John',
                     backgroundColor: '#4F46E5', // dark blue/indigo
                     data: [
                         { x: new Date('2024-03-03'), y: 'Development', duration: 2 },
@@ -48,7 +48,7 @@ const Dashboard = ({ user, total_projects, total_tasks, progress_projects, compl
                     ]
                 },
                 {
-                    label: 'Michael',
+                    label: 'Rachel',
                     backgroundColor: '#F97316', // orange
                     data: [
                         { x: new Date('2024-03-03'), y: 'Development', duration: 1 },
@@ -59,7 +59,7 @@ const Dashboard = ({ user, total_projects, total_tasks, progress_projects, compl
                     ]
                 },
                 {
-                    label: 'Jason',
+                    label: 'Steven',
                     backgroundColor: '#7DD3FC', // light blue
                     data: [
                         { x: new Date('2024-03-04'), y: 'Development', duration: 2 },

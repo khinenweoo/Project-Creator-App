@@ -48,7 +48,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return inertia("User/Create");
+        $authUser = auth()->user();
+        return inertia("User/Create", [
+            'auth' => new UserCrudResource($authUser),
+        ]);
     }
 
     /**
@@ -110,8 +113,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $authUser = auth()->user();
         return inertia('User/Edit', [
             'user' => new UserEditResource($user),
+            'auth' => new UserCrudResource($authUser),
         ]);
     }
 

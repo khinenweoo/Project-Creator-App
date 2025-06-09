@@ -5,7 +5,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import InputError from "../../Components/InputError";
 import { Button } from "primereact/button";
 
-export default function Edit({ user }) {
+export default function Edit({ user, auth }) {
 
     const userData = user?.data || user || {};
     const userId = user?.data.id || user.id;
@@ -44,7 +44,7 @@ export default function Edit({ user }) {
 
     
     return (
-        <Layout>
+        <Layout user={auth.data}>
             <Head title="User Edit" />
             <div className="card">
                 <section className="max-w-xl">
